@@ -231,3 +231,73 @@ export async function getPersonalizedAds(
   scoredAds.sort((a, b) => b.relevanceScore - a.relevanceScore);
   return scoredAds.slice(0, limit);
 }
+
+export async function matchAdsForMissingItem(
+  role: string,
+  description: string,
+  limit = 2
+): Promise<Ad[]> {
+  const supabase = await createClient();
+  const searchTerms = [role, description].join(" ").toLowerCase();
+
+  const keywords = [
+    "เบลเซอร์", "สูท", "แจ็กเก็ต", "เสื้อคลุม", "คาร์ดิแกน",
+    "เชิ้ต", "เสื้อยืด", "เสื้อโปโล", "สเวตเตอร์", "ฮู้ด",
+    "ยีนส์", "สแล็ค", "กางเกงขายาว", "กางเกงขาสั้น", "กระโปรง",
+    "เดรส", "รองเท้า", "ผ้าใบ", "สนีกเกอร์", "โลฟเฟอร์", "คัตชู", "ส้นสูง", "แตะ",
+    "หมวก", "กระเป๋า", "เข็มขัด", "เนคไท"
+  ].filter((kw) => searchTerms.includes(kw));
+
+  const { data: adsData } = await supabase
+    .from("ads")
+    .select(`
+      *,
+      shop:shops(*),
+      categories:ad_categories(categories(*)),
+      fashion_tags:ad_fashion_tags(fashion_tags(*))
+    `)
+    .eq("status", "active")
+    .limit(20);
+
+  if (!adsData || adsData.length === 0) return [];
+
+  const eligibleAds: Ad[] = adsData
+    .map((raw) => {
+      const shop = raw.shop;
+      const categories = (raw.categories || [])
+        .map((c: { categories: unknown }) => c.categories)
+        .filter(Boolean);
+      const fashion_tags = (raw.fashion_tags || [])
+        .map((t: { fashion_tags: unknown }) => t.fashion_tags)
+        .filter(Boolean);
+      return { ...raw, shop, categories, fashion_tags } as Ad;
+    })
+    .filter((ad) => ad.shop?.status === "approved");
+
+  if (keywords.length === 0) {
+    return eligibleAds.slice(0, limit);
+  }
+
+  const matched = eligibleAds
+    .map((ad) => {
+      let score = 0;
+      const title = (ad.title || "").toLowerCase();
+      const desc = (ad.description || "").toLowerCase();
+      const catNames = (ad.categories || []).map((c) => (c.name_th || c.slug || "").toLowerCase()).join(" ");
+      const tagNames = (ad.fashion_tags || []).map((t) => (t.name_th || t.name_en || "").toLowerCase()).join(" ");
+
+      for (const kw of keywords) {
+        if (title.includes(kw)) score += 5;
+        if (catNames.includes(kw)) score += 4;
+        if (tagNames.includes(kw)) score += 3;
+        if (desc.includes(kw)) score += 2;
+      }
+
+      return { ad, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .map((item) => item.ad);
+
+  return matched.length > 0 ? matched.slice(0, limit) : eligibleAds.slice(0, limit);
+}

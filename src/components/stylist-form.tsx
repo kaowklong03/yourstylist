@@ -841,12 +841,90 @@ export function StylistForm({
                       </div>
                     </div>
 
-                    <div className="pt-4 border-t border-line space-y-2 text-xs">
-                      <p className="text-muted flex items-start gap-2">
-                        <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                        <span>{outfit.comfortNote}</span>
-                      </p>
-                    </div>
+                      {/* Missing Items & Matched Sponsored Ads */}
+                      {outfit.missingItems && outfit.missingItems.length > 0 && (
+                        <div className="pt-4 border-t border-line space-y-3">
+                          <div className="flex items-center gap-1.5 text-xs font-semibold text-charcoal">
+                            <AlertTriangle className="w-3.5 h-3.5 text-warning" />
+                            <span>ชิ้นที่แนะนำเพิ่มเติมสำหรับลุคนี้:</span>
+                          </div>
+
+                          <div className="space-y-3">
+                            {outfit.missingItems.map((missing, mIdx) => (
+                              <div key={mIdx} className="p-3 bg-muted/15 border border-line rounded-lg space-y-2.5">
+                                <div className="text-xs">
+                                  <span className="text-muted">ตู้ของคุณยังไม่มี: </span>
+                                  <strong className="text-charcoal font-medium">
+                                    {missing.description || missing.role}
+                                  </strong>
+                                </div>
+
+                                {/* Matched Ads from partner shops */}
+                                {missing.matchedAds && missing.matchedAds.length > 0 ? (
+                                  <div className="space-y-2 pt-1 border-t border-line/60">
+                                    <div className="flex items-center justify-between text-[11px] font-mono text-muted">
+                                      <span>🛍️ ไอเทมใกล้เคียงจากร้านค้า:</span>
+                                      <span className="text-[10px] bg-paper px-1.5 py-0.5 border border-line rounded text-muted">
+                                        โฆษณา
+                                      </span>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                      {missing.matchedAds.map((ad) => {
+                                        const adImage = ad.cover_image_path
+                                          ? ad.cover_image_path.startsWith("http") || ad.cover_image_path.startsWith("/")
+                                            ? ad.cover_image_path
+                                            : `/api/assets?bucket=ad-assets&path=${encodeURIComponent(ad.cover_image_path)}`
+                                          : "/demo/look-olive.svg";
+
+                                        return (
+                                          <Link
+                                            key={ad.id}
+                                            href={`/ads/${ad.slug}`}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-3 p-2 bg-background border border-line hover:border-olive transition-colors rounded group"
+                                          >
+                                            <div className="w-12 h-12 relative shrink-0 bg-paper overflow-hidden rounded border border-line/60">
+                                              <Image
+                                                src={adImage}
+                                                alt={ad.title}
+                                                fill
+                                                unoptimized={Boolean(adImage.startsWith("/api/assets"))}
+                                                className="object-cover group-hover:scale-105 transition-transform"
+                                              />
+                                            </div>
+                                            <div className="min-w-0 flex-1">
+                                              <span className="text-[10px] font-mono text-muted block truncate">
+                                                {ad.shop?.name || "ร้านค้าพันธมิตร"}
+                                              </span>
+                                              <strong className="text-xs text-charcoal font-medium block truncate group-hover:text-olive transition-colors">
+                                                {ad.title}
+                                              </strong>
+                                              {ad.price_text ? (
+                                                <span className="text-xs text-olive font-semibold block">
+                                                  {ad.price_text}
+                                                </span>
+                                              ) : null}
+                                            </div>
+                                          </Link>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="pt-4 border-t border-line space-y-2 text-xs">
+                        <p className="text-muted flex items-start gap-2">
+                          <Info className="w-4 h-4 shrink-0 mt-0.5" />
+                          <span>{outfit.comfortNote}</span>
+                        </p>
+                      </div>
                   </article>
                 );
               })}

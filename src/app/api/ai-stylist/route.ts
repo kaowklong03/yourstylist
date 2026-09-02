@@ -8,7 +8,7 @@ import { getEventIdentity, passRateLimit, requireSameOrigin } from "@/lib/reques
 import { getAdminClient } from "@/lib/supabase/admin";
 import { getFitProfile } from "@/lib/fit-profile";
 import { getAggregatedFeedbackSummary } from "@/lib/saved-outfits";
-import { getPersonalizedAds } from "@/lib/ad-relevance";
+import { getPersonalizedAds, matchAdsForMissingItem } from "@/lib/ad-relevance";
 import {
   outfitResponseSchema,
   wardrobeOutfitInputSchema,
@@ -108,6 +108,26 @@ export async function POST(request: Request) {
   let proContext = "";
   let proNotes = "";
   if (user) {
+    if (isSupabaseAdminConfigured()) {
+      const admin = getAdminClient();
+      const { data: prefData } = await admin
+        .from("customer_preferences")
+        .select("personal_color_tone")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (prefData?.personal_color_tone) {
+        const tone = prefData.personal_color_tone;
+        if (tone === "warm") {
+          proContext += `[Personal Color - Warm Undertone]: ผู้ใช้มีโทนสีผิวแบบ Warm Tone (ผิวโทนอุ่น) แนะนำให้เน้นจับคู่เสื้อผ้าสีโทนอุ่น เช่น ครีม, เบจ, เขียวโอลีฟ, ส้มอิฐ, น้ำตาลคาราเมล, เอิร์ธโทน เพื่อขับผิวหน้าให้ดูสดใสเปล่งปลั่ง\n`;
+        } else if (tone === "cool") {
+          proContext += `[Personal Color - Cool Undertone]: ผู้ใช้มีโทนสีผิวแบบ Cool Tone (ผิวโทนเย็น) แนะนำให้เน้นจับคู่เสื้อผ้าสีโทนเย็น เช่น ขาวบริสุทธิ์, สีกรมท่า, ฟ้าพาสเทล, เทาเข้ม, ม่วงลาเวนเดอร์, ดำ เพื่อขับผิวหน้าให้ดูสว่างสดใส\n`;
+        } else if (tone === "neutral") {
+          proContext += `[Personal Color - Neutral Undertone]: ผู้ใช้มีโทนสีผิวแบบ Neutral Tone เข้ากับโทนสีธรรมชาติได้ดีทั้งอุ่นและเย็น\n`;
+        }
+      }
+    }
+
     const entitlements = await getCustomerEntitlements(user.id, user.role);
     if (entitlements.isProActive) {
       // Resolve day from request weekday or fallback to today in Bangkok
@@ -220,24 +240,37 @@ export async function POST(request: Request) {
     // Server-side ownership & validity check for returned item IDs
     const validUserItemMap = new Map<string, WardrobeItem>(availableItems.map((i) => [i.id, i]));
 
-    const validatedOutfits = wardrobeResult.outfits.map((outfit) => {
-      const validItems = outfit.items
-        .filter((itemRef) => validUserItemMap.has(itemRef.wardrobeItemId))
-        .map((itemRef) => {
-          const details = validUserItemMap.get(itemRef.wardrobeItemId);
-          return {
-            ...itemRef,
-            itemDetails: details
-              ? { ...details, signed_image_url: wardrobeAssetUrl(details.image_path) }
-              : null,
-          };
-        });
+    const validatedOutfits = await Promise.all(
+      wardrobeResult.outfits.map(async (outfit) => {
+        const validItems = outfit.items
+          .filter((itemRef) => validUserItemMap.has(itemRef.wardrobeItemId))
+          .map((itemRef) => {
+            const details = validUserItemMap.get(itemRef.wardrobeItemId);
+            return {
+              ...itemRef,
+              itemDetails: details
+                ? { ...details, signed_image_url: wardrobeAssetUrl(details.image_path) }
+                : null,
+            };
+          });
 
-      return {
-        ...outfit,
-        items: validItems,
-      };
-    });
+        const missingItemsWithAds = await Promise.all(
+          (outfit.missingItems || []).map(async (missing) => {
+            const matchedAds = await matchAdsForMissingItem(missing.role, missing.description, 2);
+            return {
+              ...missing,
+              matchedAds,
+            };
+          })
+        );
+
+        return {
+          ...outfit,
+          items: validItems,
+          missingItems: missingItemsWithAds,
+        };
+      })
+    );
 
     // Separated sponsored ads retrieval (AFTER AI recommendation generation finishes)
     const sponsoredAds = await getPersonalizedAds({

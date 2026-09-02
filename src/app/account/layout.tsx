@@ -5,6 +5,7 @@ const links = [
   { href: "/account", label: "ภาพรวม" },
   { href: "/account/wardrobe", label: "ตู้เสื้อผ้าของฉัน" },
   { href: "/account/profile", label: "โปรไฟล์และความชอบ" },
+  { href: "/account/personal-color", label: "วิเคราะห์ Personal Color" },
   { href: "/account/style-memory", label: "กิจวัตรและสไตล์" },
   { href: "/account/weekly-planner", label: "วางแผนลุค 7 วัน" },
   { href: "/account/outfits", label: "ประวัติ AI Stylist" },

@@ -14,7 +14,7 @@ export function AppearanceSettingsForm({
   const [isPending, startTransition] = useTransition();
   const [savedSuccess, setSavedSuccess] = useState(false);
 
-  const initialTheme = currentSettings?.theme || "system";
+  const initialTheme = currentSettings?.theme || "light";
   const initialAccent =
     (currentSettings?.accent === "monochrome" ? "mono" : currentSettings?.accent) || "olive";
 

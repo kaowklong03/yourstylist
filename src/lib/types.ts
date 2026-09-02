@@ -178,10 +178,13 @@ export interface WardrobeOutfitItemRef {
   itemDetails?: WardrobeItem | null;
 }
 
+export type PersonalColorTone = "warm" | "cool" | "neutral";
+
 export interface WardrobeMissingItem {
   role: string;
   description: string;
   optional: boolean;
+  matchedAds?: Ad[];
 }
 
 export interface WardrobeOutfitSuggestion {

@@ -8,10 +8,10 @@ import { getAdminClient } from "@/lib/supabase/admin";
 
 export async function saveAppearanceSettings(formData: FormData) {
   const user = await requireCustomerExperiencePage("/login/customer");
-  const rawTheme = (formData.get("theme") as string) || "system";
+  const rawTheme = (formData.get("theme") as string) || "light";
   const rawAccent = (formData.get("accent") as string) || "olive";
 
-  const theme = ["light", "dark", "system"].includes(rawTheme) ? rawTheme : "system";
+  const theme = ["light", "dark", "system"].includes(rawTheme) ? rawTheme : "light";
   const accent = rawAccent === "monochrome" ? "mono" : rawAccent;
 
   const supabase = user.role === "admin" ? getAdminClient() : await createClient();

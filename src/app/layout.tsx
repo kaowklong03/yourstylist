@@ -34,7 +34,7 @@ import { cookies } from "next/headers";
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const currentUser = await getCurrentUser();
   const cookieStore = await cookies();
-  const theme = cookieStore.get("appearance_theme")?.value || "system";
+  const theme = cookieStore.get("appearance_theme")?.value || "light";
   const accent = cookieStore.get("appearance_accent")?.value || "default";
 
   return (
