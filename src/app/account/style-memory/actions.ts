@@ -18,8 +18,8 @@ export async function saveStyleMemory(formData: FormData) {
   const location_context = formData.get("location_context") as string;
   const formality = formData.get("formality") as string;
   const notes = formData.get("notes") as string;
-  const is_active = formData.get("is_active") === "true";
-  const use_for_ai = formData.get("use_for_ai") === "true";
+  const is_active = formData.getAll("is_active").includes("true");
+  const use_for_ai = formData.getAll("use_for_ai").includes("true");
   
   const preferred_styles_str = formData.get("preferred_styles") as string;
   const preferred_styles = preferred_styles_str ? preferred_styles_str.split(",").map(s => s.trim()) : [];
@@ -42,6 +42,7 @@ export async function saveStyleMemory(formData: FormData) {
   }
 
   revalidatePath("/account/style-memory");
+  revalidatePath("/account/weekly-planner");
 }
 
 export async function clearStyleMemory(weekday: number) {
@@ -51,4 +52,5 @@ export async function clearStyleMemory(weekday: number) {
 
   await supabase.from("weekly_style_memories").delete().eq("user_id", user.id).eq("weekday", weekday);
   revalidatePath("/account/style-memory");
+  revalidatePath("/account/weekly-planner");
 }

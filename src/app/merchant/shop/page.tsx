@@ -15,11 +15,14 @@ export default async function MerchantShopPage() {
       <div className="badge-row"><StatusBadge tone={shop.status === "approved" ? "success" : "warning"}>{shop.status}</StatusBadge></div>
       <ShopForm
         shop={{
+          id: shop.id,
           name: shop.name,
           slug: shop.slug,
           description: shop.description,
           website_url: shop.shopee_url,
           instagram_url: shop.instagram_url,
+          logo_path: shop.logo_path,
+          cover_path: shop.cover_path,
         }}
       />
       <p className="muted">สถานะอนุมัติและ subscription แก้ได้โดยผู้ดูแลระบบเท่านั้น</p>

@@ -113,7 +113,7 @@ BEGIN
     END IF;
   END IF;
 
-  IF (SELECT auth.role()) = 'authenticated' THEN
+  IF (SELECT auth.role()) = 'authenticated' AND NOT private.is_admin() THEN
     IF tg_op = 'INSERT' AND new.status <> 'draft' THEN
       RAISE EXCEPTION 'merchant ads must be created as draft';
     END IF;

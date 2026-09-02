@@ -123,6 +123,8 @@ export const shopSchema = z.object({
       .url("ลิงก์ Instagram ไม่ถูกต้อง")
       .refine((value) => new URL(value).protocol === "https:", "ต้องใช้ HTTPS"),
   ]).optional(),
+  logoPath: z.string().trim().nullable().optional(),
+  coverPath: z.string().trim().nullable().optional(),
   tagIds: z.array(z.string().uuid()).max(20).optional(),
 });
 
@@ -408,6 +410,7 @@ export const wardrobeOutfitResponseSchema = z
 export const wardrobeOutfitInputSchema = outfitInputSchema.extend({
   mode: z.enum(["general", "wardrobe"]).default("general"),
   excludedItemIds: z.array(z.string().uuid()).max(50).default([]),
+  weekday: z.coerce.number().int().min(1).max(7).nullable().optional(),
 });
 
 export const savedOutfitSchema = z.object({

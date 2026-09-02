@@ -50,10 +50,10 @@ async function canReadAsset(
     if (ownedShop) return true;
   }
   if (bucket === "shop-assets") {
-    const { data: shop } = await admin.from("shops").select("id, owner_id, status, subscription_status, subscription_ends_at").or(`logo_path.eq.${path},cover_path.eq.${path}`).is("deleted_at", null).maybeSingle();
+    const { data: shop } = await admin.from("shops").select("id, owner_id, status").or(`logo_path.eq.${path},cover_path.eq.${path}`).is("deleted_at", null).maybeSingle();
     if (!shop) return false;
     if (user?.role === "merchant" && shop.owner_id === user.id) return true;
-    return shop.status === "approved" && shop.subscription_status === "active" && (!shop.subscription_ends_at || new Date(shop.subscription_ends_at) > new Date());
+    return shop.status === "approved";
   }
   const { data: coverAd } = await admin.from("ads").select("status, starts_at, ends_at, shops(owner_id, status, subscription_status, subscription_ends_at)").eq("cover_image_path", path).is("deleted_at", null).maybeSingle();
   let ad = coverAd;

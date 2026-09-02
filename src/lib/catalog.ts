@@ -24,12 +24,13 @@ function mapShop(row: Record<string, unknown>): Shop {
       (row.website_url as string | null | undefined) ??
       (row.shopee_url as string | null | undefined) ??
       null,
+    instagram_url: (row.instagram_url as string | null | undefined) ?? null,
     logo_path: assetUrl("shop-assets", row.logo_path as string | null),
     cover_path: assetUrl("shop-assets", row.cover_path as string | null),
   };
 }
 
-function mapAd(row: Record<string, unknown>): Ad {
+export function mapAd(row: Record<string, unknown>): Ad {
   const shopRow = Array.isArray(row.shops) ? row.shops[0] : row.shops;
   const categoryRows = (row.ad_categories as { categories: Category | Category[] }[] | null) ?? [];
   const demoCover =

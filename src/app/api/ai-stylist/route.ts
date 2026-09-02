@@ -110,9 +110,9 @@ export async function POST(request: Request) {
   if (user) {
     const entitlements = await getCustomerEntitlements(user.id, user.role);
     if (entitlements.isProActive) {
-      // Resolve day in Bangkok
+      // Resolve day from request weekday or fallback to today in Bangkok
       const bkkDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Bangkok" }));
-      const weekday = bkkDate.getDay() || 7; // 1-7, 1=Monday
+      const weekday = typeof parsed.data.weekday === "number" ? parsed.data.weekday : (bkkDate.getDay() || 7);
       
       const admin = getAdminClient();
       const { data: memory } = await admin

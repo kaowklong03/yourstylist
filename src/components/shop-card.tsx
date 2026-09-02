@@ -12,6 +12,7 @@ export function ShopCard({ shop }: { shop: Shop }) {
           alt={`ภาพบรรยากาศร้าน ${shop.name}`}
           width={900}
           height={600}
+          unoptimized={Boolean(shop.cover_path?.startsWith("/api/assets"))}
           className="shop-image"
         />
         {shop.is_demo ? <DemoBadge /> : null}
@@ -22,6 +23,7 @@ export function ShopCard({ shop }: { shop: Shop }) {
           alt=""
           width={48}
           height={48}
+          unoptimized={Boolean(shop.logo_path?.startsWith("/api/assets"))}
           className="shop-logo"
         />
         <div>

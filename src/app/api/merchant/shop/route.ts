@@ -20,6 +20,8 @@ export async function POST(request: Request) {
     // The database column name is retained for legacy compatibility.
     shopee_url: parsed.data.websiteUrl || null,
     instagram_url: parsed.data.instagramUrl || null,
+    ...(parsed.data.logoPath !== undefined ? { logo_path: parsed.data.logoPath } : {}),
+    ...(parsed.data.coverPath !== undefined ? { cover_path: parsed.data.coverPath } : {}),
   };
   const shopId = existing?.id ?? randomUUID();
   const { error } = existing

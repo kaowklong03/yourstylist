@@ -8,18 +8,21 @@ import { getAdminClient } from "@/lib/supabase/admin";
 
 export async function saveAppearanceSettings(formData: FormData) {
   const user = await requireCustomerExperiencePage("/login/customer");
-  const theme = formData.get("theme") as string;
-  const accent = formData.get("accent") as string;
+  const rawTheme = (formData.get("theme") as string) || "system";
+  const rawAccent = (formData.get("accent") as string) || "olive";
+
+  const theme = ["light", "dark", "system"].includes(rawTheme) ? rawTheme : "system";
+  const accent = rawAccent === "monochrome" ? "mono" : rawAccent;
 
   const supabase = user.role === "admin" ? getAdminClient() : await createClient();
   
   await supabase
     .from("customer_preferences")
-    .update({
+    .upsert({
+      user_id: user.id,
       appearance_theme: theme,
-      appearance_accent: accent
-    })
-    .eq("user_id", user.id);
+      appearance_accent: accent,
+    });
 
   const cookieStore = await cookies();
   cookieStore.set("appearance_theme", theme, { path: "/", maxAge: 60 * 60 * 24 * 365 });

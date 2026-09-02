@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/incompatible-library */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,6 +25,70 @@ import {
 } from "lucide-react";
 import { SponsoredAdSection } from "@/components/sponsored-ad-section";
 import type { OutfitResponse, WardrobeItem, WardrobeOutfitResponse } from "@/lib/types";
+
+export interface RoutineMemory {
+  weekday: number;
+  title: string;
+  usual_activity: string;
+  time_of_day?: string | null;
+  location_context?: string | null;
+  formality?: string | null;
+  notes?: string | null;
+  preferred_styles?: string[] | null;
+  is_active?: boolean;
+  use_for_ai?: boolean;
+}
+
+function resolveActivityId(activityText: string): string {
+  if (!activityText) return "ไปคาเฟ่";
+  const lower = activityText.toLowerCase();
+  if (lower.includes("เรียน") || lower.includes("มหาลัย") || lower.includes("ศึกษา") || lower.includes("สอบ")) {
+    return "ไปมหาวิทยาลัย";
+  }
+  if (lower.includes("งาน") || lower.includes("ทำงาน") || lower.includes("ออฟฟิศ") || lower.includes("ประชุม")) {
+    return "ไปทำงาน";
+  }
+  if (lower.includes("คาเฟ่") || lower.includes("กาแฟ")) {
+    return "ไปคาเฟ่";
+  }
+  if (lower.includes("เดต") || lower.includes("แฟน")) {
+    return "ไปเดต";
+  }
+  if (lower.includes("ทะเล") || lower.includes("หาด") || lower.includes("เกาะ")) {
+    return "ไปเที่ยวทะเล";
+  }
+  if (lower.includes("บ้าน") || lower.includes("ชิล") || lower.includes("นอน")) {
+    return "อยู่บ้าน / ชิลล์";
+  }
+  if (lower.includes("แต่ง") || lower.includes("ปาร์ตี้") || lower.includes("เลี้ยง") || lower.includes("อีเวนต์")) {
+    return "ออกงาน / ปาร์ตี้";
+  }
+  if (lower.includes("เที่ยว") || lower.includes("เดินทาง") || lower.includes("บิน")) {
+    return "เดินทาง / ท่องเที่ยว";
+  }
+  return activityText;
+}
+
+function resolveFormality(formalityText?: string | null): "casual" | "smart_casual" | "formal" {
+  if (!formalityText) return "casual";
+  const lower = formalityText.toLowerCase();
+  if (lower.includes("สูง") || lower.includes("ทางการ") || lower.includes("formal")) {
+    return "formal";
+  }
+  if (lower.includes("กลาง") || lower.includes("กึ่ง") || lower.includes("smart") || lower.includes("elevated")) {
+    return "smart_casual";
+  }
+  return "casual";
+}
+
+function resolveTimeOfDay(timeText?: string | null): "morning" | "afternoon" | "evening" | "all_day" {
+  if (!timeText) return "all_day";
+  const lower = timeText.toLowerCase();
+  if (lower.includes("เช้า") || lower.includes("morning")) return "morning";
+  if (lower.includes("บ่าย") || lower.includes("กลางวัน") || lower.includes("afternoon")) return "afternoon";
+  if (lower.includes("เย็น") || lower.includes("ค่ำ") || lower.includes("ดึก") || lower.includes("evening")) return "evening";
+  return "all_day";
+}
 
 type StylistFields = {
   mode: "general" | "wardrobe";
@@ -72,9 +136,17 @@ const moodOptions = [
 export function StylistForm({
   configured,
   initialMode = "general",
+  initialRoutine,
+  targetWeekday,
+  weekdayLabel,
+  initialActivityQuery,
 }: {
   configured: boolean;
   initialMode?: "general" | "wardrobe";
+  initialRoutine?: RoutineMemory | null;
+  targetWeekday?: number;
+  weekdayLabel?: string;
+  initialActivityQuery?: string;
 }) {
   const [mode, setMode] = useState<"general" | "wardrobe">(initialMode);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -82,6 +154,16 @@ export function StylistForm({
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [isLoadingWardrobe, setIsLoadingWardrobe] = useState(false);
   const [wardrobeFetchError, setWardrobeFetchError] = useState<string | null>(null);
+
+  const effectiveActivity = initialRoutine?.usual_activity || initialActivityQuery || "";
+  const resolvedActivity = effectiveActivity ? resolveActivityId(effectiveActivity) : "ไปคาเฟ่";
+  const resolvedFormality = resolveFormality(initialRoutine?.formality);
+  const resolvedTimeOfDay = resolveTimeOfDay(initialRoutine?.time_of_day);
+  const resolvedStyles = initialRoutine?.preferred_styles?.join(", ") || "";
+  const resolvedNotes = [
+    initialRoutine?.location_context ? `สถานที่: ${initialRoutine.location_context}` : "",
+    initialRoutine?.notes || "",
+  ].filter(Boolean).join(" ");
 
   const {
     register,
@@ -95,17 +177,17 @@ export function StylistForm({
       heightCm: "",
       weightKg: "",
       clothingPresentation: "unspecified",
-      activity: "ไปคาเฟ่",
-      formality: "casual",
+      activity: resolvedActivity,
+      formality: resolvedFormality,
       weather: "32°C ร้อนชื้น มีแดดจัด",
-      timeOfDay: "all_day",
-      preferredStyles: "",
+      timeOfDay: resolvedTimeOfDay,
+      preferredStyles: resolvedStyles,
       preferredColors: "",
       avoidedColors: "",
       preferredFit: "unspecified",
       budget: "",
       anchorItem: "",
-      notes: "",
+      notes: resolvedNotes,
       saveForNextTime: false,
     },
   });
@@ -117,6 +199,37 @@ export function StylistForm({
   const [generalResult, setGeneralResult] = useState<OutfitResponse | null>(null);
   const [wardrobeResult, setWardrobeResult] = useState<WardrobeOutfitResponse | null>(null);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialRoutine) {
+      const act = resolveActivityId(initialRoutine.usual_activity);
+      setValue("activity", act);
+      setValue("formality", resolveFormality(initialRoutine.formality));
+      setValue("timeOfDay", resolveTimeOfDay(initialRoutine.time_of_day));
+      if (initialRoutine.preferred_styles?.length) {
+        setValue("preferredStyles", initialRoutine.preferred_styles.join(", "));
+      }
+      const notes = [
+        initialRoutine.location_context ? `สถานที่: ${initialRoutine.location_context}` : "",
+        initialRoutine.notes || "",
+      ].filter(Boolean).join(" ");
+      if (notes) {
+        setValue("notes", notes);
+      }
+    } else if (initialActivityQuery) {
+      setValue("activity", resolveActivityId(initialActivityQuery));
+    }
+  }, [initialRoutine, initialActivityQuery, setValue]);
+
+  const displayActivities = useMemo(() => {
+    if (!selectedActivity || quickActivities.some((a) => a.id === selectedActivity)) {
+      return quickActivities;
+    }
+    return [
+      { id: selectedActivity, label: selectedActivity, icon: "🎯" },
+      ...quickActivities,
+    ];
+  }, [selectedActivity]);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -180,6 +293,7 @@ export function StylistForm({
     const payload = {
       ...values,
       mode,
+      weekday: targetWeekday,
       excludedItemIds: Array.from(excludedIds),
       heightCm: values.heightCm && String(values.heightCm).trim() !== "" ? Number(values.heightCm) : null,
       weightKg: values.weightKg && String(values.weightKg).trim() !== "" ? Number(values.weightKg) : null,
@@ -327,6 +441,27 @@ export function StylistForm({
       <div className="grid lg:grid-cols-[1fr_320px] gap-10 items-start">
         <form onSubmit={handleSubmit(submit)} className="space-y-8">
           
+          {/* Routine Memory Notice if loaded */}
+          {initialRoutine && (
+            <div className="p-5 border border-olive/40 bg-olive-pale/25 rounded-xl space-y-2">
+              <div className="flex items-center gap-2 font-mono uppercase font-semibold text-olive text-xs">
+                <Sparkles className="w-4 h-4" />
+                <span>ดึงข้อมูลจากกิจวัตรวัน{weekdayLabel || ""}เรียบร้อยแล้ว</span>
+              </div>
+              <div className="text-xs text-charcoal space-y-1">
+                <p>
+                  กิจกรรม: <strong>{initialRoutine.usual_activity}</strong>
+                  {initialRoutine.time_of_day ? <> · ช่วงเวลา: <strong>{initialRoutine.time_of_day}</strong></> : null}
+                  {initialRoutine.location_context ? <> · สถานที่: <strong>{initialRoutine.location_context}</strong></> : null}
+                  {initialRoutine.formality ? <> · ระดับทางการ: <strong>{initialRoutine.formality}</strong></> : null}
+                </p>
+                <p className="text-muted">
+                  ระบบเลือกกิจกรรมและตั้งค่ากาลเทศะให้อัตโนมัติแล้ว คุณสามารถกดปุ่ม <strong>&quot;ให้ AI คัดเลือกชุดให้ฉัน&quot;</strong> ด้านล่างได้ทันที หรือปรับเปลี่ยนได้ตามต้องการ
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Section 1: กิจกรรมวันนี้ (Selectable Visual Chips) */}
           <div className="p-6 sm:p-8 bg-paper border border-line space-y-5">
             <div className="flex items-center justify-between border-b border-line pb-3">
@@ -339,14 +474,14 @@ export function StylistForm({
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {quickActivities.map((act) => {
+              {displayActivities.map((act) => {
                 const isSelected = selectedActivity === act.id;
                 return (
                   <button
                     key={act.id}
                     type="button"
                     onClick={() => setValue("activity", act.id)}
-                    className={`p-3.5 text-left border transition-all min-h-[72px] flex flex-col justify-between ${
+                    className={`p-3.5 text-left border transition-all min-h-[72px] flex flex-col justify-between cursor-pointer ${
                       isSelected
                         ? "border-charcoal bg-charcoal text-background font-medium shadow-sm"
                         : "border-line bg-background text-charcoal hover:border-muted"

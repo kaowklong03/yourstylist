@@ -54,6 +54,7 @@ export default async function AdDetailPage({
             width={960}
             height={1200}
             priority
+            unoptimized={Boolean(ad.cover_image_path?.startsWith("/api/assets"))}
           />
           <span className="sponsored-label">โฆษณา</span>
           {ad.is_demo ? <DemoBadge /> : null}

@@ -2,6 +2,7 @@ import { AdCard } from "@/components/ad-card";
 import { EmptyState } from "@/components/ui";
 import { requireCustomerExperiencePage } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { mapAd } from "@/lib/catalog";
 import type { Ad } from "@/lib/types";
 
 export default async function LikesPage() {
@@ -9,17 +10,18 @@ export default async function LikesPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("ad_likes")
-    .select("ad_id, ads(*, shops(*))")
+    .select("ad_id, ads(*, shops(*), ad_categories(categories(*)))")
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
+
   const likedAds = (data ?? [])
     .map((row) => {
       const ad = Array.isArray(row.ads) ? row.ads[0] : row.ads;
       if (!ad) return null;
-      const shop = Array.isArray(ad.shops) ? ad.shops[0] : ad.shops;
-      return { ...ad, shop } as unknown as Ad;
+      return mapAd(ad as Record<string, unknown>);
     })
     .filter((ad): ad is Ad => Boolean(ad));
+
   return (
     <>
       <header className="dashboard-heading">

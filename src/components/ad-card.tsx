@@ -6,16 +6,23 @@ import { DemoBadge } from "@/components/ui";
 import { ImpressionBeacon } from "@/components/impression-beacon";
 
 export function AdCard({ ad, priority = false }: { ad: Ad; priority?: boolean }) {
+  const imageSrc = ad.cover_image_path
+    ? ad.cover_image_path.startsWith("http") || ad.cover_image_path.startsWith("/")
+      ? ad.cover_image_path
+      : `/api/assets?bucket=ad-assets&path=${encodeURIComponent(ad.cover_image_path)}`
+    : "/demo/look-olive.svg";
+
   return (
     <article className="ad-card" data-ad-id={ad.id}>
       <ImpressionBeacon adId={ad.id} pageContext="ad_card" disabled={ad.is_demo} />
       <Link href={`/ads/${ad.slug}`} className="ad-image-wrap">
         <Image
-          src={ad.cover_image_path ?? "/demo/look-olive.svg"}
+          src={imageSrc}
           alt={ad.image_alt ?? ad.title}
           width={720}
           height={900}
           priority={priority}
+          unoptimized={Boolean(imageSrc.startsWith("/api/assets"))}
           className="ad-image"
         />
         <span className="sponsored-label">โฆษณา</span>
