@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Sparkles, Copy, Check, ExternalLink, Download, X, Camera, Shirt, Layers } from "lucide-react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { Sparkles, Copy, Check, ExternalLink, Download, X, Camera, Layers, Loader2 } from "lucide-react";
 
 export interface LookbookItem {
   role: string;
@@ -23,14 +24,87 @@ interface Props {
   outfit: LookbookOutfit | null;
 }
 
+export function resolveItemImage(role: string, description: string, explicitUrl?: string | null): string {
+  if (explicitUrl && explicitUrl.trim() && (explicitUrl.startsWith("/") || explicitUrl.startsWith("http"))) {
+    return explicitUrl;
+  }
+
+  const text = (role + " " + description).toLowerCase();
+
+  if (
+    text.includes("เบลเซอร์") ||
+    text.includes("สูท") ||
+    text.includes("blazer") ||
+    text.includes("jacket") ||
+    text.includes("คลุม") ||
+    text.includes("coat") ||
+    text.includes("เสื้อคลุม")
+  ) {
+    return "/images/fittoday/ad-soft-tailored-set-v1.webp";
+  }
+  if (
+    text.includes("กางเกง") ||
+    text.includes("กระโปรง") ||
+    text.includes("pants") ||
+    text.includes("trousers") ||
+    text.includes("bottom") ||
+    text.includes("jeans") ||
+    text.includes("ท่อนล่าง") ||
+    text.includes("สแล็ค")
+  ) {
+    return "/images/fittoday/ad-pleated-pants.jpg";
+  }
+  if (
+    text.includes("รองเท้า") ||
+    text.includes("shoes") ||
+    text.includes("loafers") ||
+    text.includes("sneakers") ||
+    text.includes("โลฟเฟอร์")
+  ) {
+    return "/images/fittoday/ad-city-shoes.jpg";
+  }
+  if (
+    text.includes("กระเป๋า") ||
+    text.includes("bag") ||
+    text.includes("tote") ||
+    text.includes("เครื่องประดับ") ||
+    text.includes("accessory") ||
+    text.includes("หมวก")
+  ) {
+    return "/images/fittoday/ad-structure-tote.jpg";
+  }
+  if (text.includes("เดรส") || text.includes("dress")) {
+    return "/images/fittoday/ad-summer-dress.jpg";
+  }
+
+  // Default to clean linen shirt
+  return "/demo-assets/ad-linen-shirt.jpg";
+}
+
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve) => {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => resolve(img);
+    img.onerror = () => {
+      // Fallback to default local shirt if remote image fails or CORS blocks
+      const fallback = new window.Image();
+      fallback.onload = () => resolve(fallback);
+      fallback.onerror = () => resolve(img);
+      fallback.src = "/demo-assets/ad-linen-shirt.jpg";
+    };
+    img.src = src;
+  });
+}
+
 export function LookbookStudioModal({ isOpen, onClose, outfit }: Props) {
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) {
       setCopied(false);
+      setDownloading(false);
     }
   }, [isOpen]);
 
@@ -56,7 +130,6 @@ High-fashion editorial magazine lookbook, natural diffused window daylight, clea
       setCopied(true);
       setTimeout(() => setCopied(false), 3000);
     } catch {
-      // Fallback
       const textarea = document.createElement("textarea");
       textarea.value = masterPrompt;
       document.body.appendChild(textarea);
@@ -73,102 +146,149 @@ High-fashion editorial magazine lookbook, natural diffused window daylight, clea
     window.open(`https://chatgpt.com/?q=${encoded}`, "_blank", "noopener,noreferrer");
   };
 
-  const handleDownloadMoodboard = () => {
+  const handleDownloadMoodboard = async () => {
+    if (downloading) return;
     setDownloading(true);
+
     try {
+      const displayItems = outfit.items.slice(0, 4);
+      const imageUrls = displayItems.map((item) =>
+        resolveItemImage(item.role, item.description, item.imageUrl)
+      );
+
+      // Preload all 4 images
+      const loadedImages = await Promise.all(imageUrls.map((url) => loadImage(url)));
+
       const canvas = document.createElement("canvas");
       canvas.width = 1200;
-      canvas.height = 1200;
+      canvas.height = 1450;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
       // Background
       ctx.fillStyle = "#faf8f5";
-      ctx.fillRect(0, 0, 1200, 1200);
+      ctx.fillRect(0, 0, 1200, 1450);
 
       // Outer Border
-      ctx.strokeStyle = "#e5e0d8";
-      ctx.lineWidth = 4;
-      ctx.strokeRect(40, 40, 1120, 1120);
+      ctx.strokeStyle = "#e2ddd5";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(36, 36, 1128, 1378);
 
       // Header Brand
       ctx.fillStyle = "#64748b";
-      ctx.font = "bold 20px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      ctx.font = "bold 18px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("YOURSTYLIST · LOOKBOOK MOODBOARD", 600, 95);
+      ctx.fillText("YOURSTYLIST · 4-ITEM OUTFIT MOODBOARD", 600, 85);
 
       // Outfit Title
       ctx.fillStyle = "#1e293b";
-      ctx.font = "bold 44px 'Georgia', serif";
-      ctx.fillText(outfit.name || "Curated Outfit", 600, 155);
+      ctx.font = "bold 42px 'Georgia', serif";
+      ctx.fillText(outfit.name || "Curated Outfit", 600, 140);
 
       // Subtitle / Direction
       ctx.fillStyle = "#526042";
-      ctx.font = "italic 22px 'Georgia', serif";
-      ctx.fillText(`Style Direction: ${outfit.direction || outfit.style || "Signature Look"}`, 600, 195);
+      ctx.font = "italic 20px 'Georgia', serif";
+      ctx.fillText(`Style Direction: ${outfit.direction || outfit.style || "Signature Look"}`, 600, 178);
 
-      // Grid for items (4 items or up to 4)
-      const displayItems = outfit.items.slice(0, 4);
-      const boxW = 500;
-      const boxH = 380;
-      const startX = 80;
-      const startY = 240;
-      const gapX = 40;
+      // Grid for items (2x2 layout)
+      const boxW = 510;
+      const boxH = 530;
+      const startX = 65;
+      const startY = 220;
+      const gapX = 50;
       const gapY = 40;
 
-      displayItems.forEach((item, idx) => {
+      for (let idx = 0; idx < displayItems.length; idx++) {
+        const item = displayItems[idx];
+        const img = loadedImages[idx];
         const col = idx % 2;
         const row = Math.floor(idx / 2);
         const x = startX + col * (boxW + gapX);
         const y = startY + row * (boxH + gapY);
 
-        // Box background
+        // Box background & border
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(x, y, boxW, boxH);
-        ctx.strokeStyle = "#e2ddd5";
+        ctx.strokeStyle = "#ded9d0";
         ctx.lineWidth = 2;
         ctx.strokeRect(x, y, boxW, boxH);
 
         // Header inside box
         ctx.fillStyle = "#39432f";
-        ctx.fillRect(x, y, boxW, 55);
-        ctx.fillStyle = "#faf8f5";
-        ctx.font = "bold 18px -apple-system, sans-serif";
+        ctx.fillRect(x, y, boxW, 46);
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 16px -apple-system, sans-serif";
         ctx.textAlign = "left";
-        ctx.fillText(`0${idx + 1}. ${item.role.toUpperCase()}`, x + 24, y + 35);
+        ctx.fillText(`0${idx + 1}. ${item.role.toUpperCase()}`, x + 18, y + 29);
 
-        // Description
-        ctx.fillStyle = "#1e293b";
-        ctx.font = "24px -apple-system, sans-serif";
-        const words = item.description.split(" ");
-        let line = "";
-        let lineY = y + 120;
-        for (let n = 0; n < words.length; n++) {
-          const testLine = line + words[n] + " ";
-          const metrics = ctx.measureText(testLine);
-          if (metrics.width > boxW - 50 && n > 0) {
-            ctx.fillText(line, x + 24, lineY);
-            line = words[n] + " ";
-            lineY += 36;
-          } else {
-            line = testLine;
-          }
+        // Draw Actual Item Image
+        const imgX = x + 16;
+        const imgY = y + 58;
+        const imgW = boxW - 32;
+        const imgH = 360;
+
+        // Image background container
+        ctx.fillStyle = "#f8fafc";
+        ctx.fillRect(imgX, imgY, imgW, imgH);
+        ctx.strokeStyle = "#e2e8f0";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(imgX, imgY, imgW, imgH);
+
+        if (img && img.naturalWidth > 0) {
+          // Calculate object-fit cover / contain
+          const hRatio = imgW / img.naturalWidth;
+          const vRatio = imgH / img.naturalHeight;
+          const ratio = Math.max(hRatio, vRatio); // cover
+          const centerShiftX = (imgW - img.naturalWidth * ratio) / 2;
+          const centerShiftY = (imgH - img.naturalHeight * ratio) / 2;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(imgX, imgY, imgW, imgH);
+          ctx.clip();
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            img.naturalWidth,
+            img.naturalHeight,
+            imgX + centerShiftX,
+            imgY + centerShiftY,
+            img.naturalWidth * ratio,
+            img.naturalHeight * ratio
+          );
+          ctx.restore();
         }
-        ctx.fillText(line, x + 24, lineY);
 
-        // Badge at bottom of card
+        // Item Description below image
+        ctx.fillStyle = "#1e293b";
+        ctx.font = "bold 17px -apple-system, sans-serif";
+        ctx.textAlign = "left";
+
+        const desc = item.description || "ไอเทมเสื้อผ้า";
+        let displayDesc = desc;
+        if (ctx.measureText(displayDesc).width > boxW - 40) {
+          displayDesc = desc.slice(0, 32) + "...";
+        }
+        ctx.fillText(displayDesc, x + 18, y + 450);
+
+        // Subtle category badge
         ctx.fillStyle = "#f1f5f9";
-        ctx.fillRect(x + 24, y + boxH - 65, 160, 36);
+        ctx.fillRect(x + 18, y + 472, 140, 26);
         ctx.fillStyle = "#475569";
-        ctx.font = "bold 14px sans-serif";
-        ctx.fillText("CLOTHING ITEM", x + 38, y + boxH - 42);
-      });
+        ctx.font = "bold 11px sans-serif";
+        ctx.fillText("AUTHENTIC ITEM", x + 30, y + 489);
+      }
 
       // Footer Note
       ctx.fillStyle = "#94a3b8";
-      ctx.font = "16px sans-serif";
+      ctx.font = "15px sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("Generated with YourStylist AI · 4-Angle Fashion Lookbook Generator", 600, 1115);
+      ctx.fillText(
+        "YourStylist Wardrobe Intelligence · 4-Item Lookbook Moodboard · Ready for AI Photoshoot",
+        600,
+        1385
+      );
 
       // Trigger Download
       const dataUrl = canvas.toDataURL("image/png");
@@ -177,7 +297,8 @@ High-fashion editorial magazine lookbook, natural diffused window daylight, clea
       link.href = dataUrl;
       link.click();
     } catch (e) {
-      console.error("Download failed:", e);
+      console.error("Moodboard download failed:", e);
+      alert("ไม่สามารถดาวน์โหลดรูปภาพได้ กรุณาลองใหม่อีกครั้ง");
     } finally {
       setDownloading(false);
     }
@@ -206,39 +327,53 @@ High-fashion editorial magazine lookbook, natural diffused window daylight, clea
             สตูดิโอสร้างภาพสวมชุด 4 มุมด้วย AI
           </h3>
           <p className="text-xs text-muted">
-            ชุด: <strong className="text-charcoal font-medium">{outfit.name}</strong> ({outfit.direction || "Signature Look"})
+            ชุด: <strong className="text-charcoal font-medium">{outfit.name}</strong> ({outfit.direction || outfit.style || "Signature Look"})
           </p>
         </div>
 
-        {/* Outfit 4-Item Grid Preview */}
+        {/* Outfit 4-Item Grid Preview with Real Photos */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-charcoal uppercase tracking-wider flex items-center gap-1.5">
               <Layers className="w-3.5 h-3.5 text-olive" />
-              <span>ไอเทมในชุด (4-Item Composition)</span>
+              <span>ภาพไอเทมทั้ง 4 ชิ้น (Visual Moodboard)</span>
             </span>
             <button
               type="button"
               onClick={handleDownloadMoodboard}
               disabled={downloading}
-              className="text-xs font-medium text-olive hover:underline inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+              className="text-xs font-semibold text-olive hover:underline inline-flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
             >
-              <Download className="w-3.5 h-3.5" />
-              <span>{downloading ? "กำลังดาวน์โหลด..." : "📥 บันทึกรูปภาพ Moodboard ลงเครื่อง"}</span>
+              {downloading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+              <span>{downloading ? "กำลังประกอบภาพ..." : "📥 บันทึกรูปภาพ Moodboard ลงเครื่อง"}</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            {outfit.items.slice(0, 4).map((item, idx) => (
-              <div key={idx} className="p-3 bg-paper border border-line rounded space-y-1">
-                <span className="text-[10px] font-mono text-olive uppercase block font-semibold">
-                  0{idx + 1}. {item.role}
-                </span>
-                <p className="text-xs text-charcoal font-medium line-clamp-2">
-                  {item.description}
-                </p>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {outfit.items.slice(0, 4).map((item, idx) => {
+              const itemImg = resolveItemImage(item.role, item.description, item.imageUrl);
+              return (
+                <div key={idx} className="bg-paper border border-line p-2.5 rounded space-y-2 flex flex-col justify-between">
+                  <div className="aspect-square relative bg-background border border-line/60 rounded overflow-hidden">
+                    <Image
+                      src={itemImg}
+                      alt={item.description}
+                      fill
+                      unoptimized
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <span className="text-[10px] font-mono text-olive uppercase block font-semibold">
+                      0{idx + 1}. {item.role}
+                    </span>
+                    <p className="text-[11px] text-charcoal font-medium line-clamp-2 leading-tight">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -257,7 +392,7 @@ High-fashion editorial magazine lookbook, natural diffused window daylight, clea
           <div className="relative">
             <textarea
               readOnly
-              rows={7}
+              rows={6}
               value={masterPrompt}
               className="w-full p-3.5 bg-paper/60 border border-line text-xs font-mono text-charcoal leading-relaxed rounded resize-none focus:outline-none focus:border-olive selection:bg-olive-pale"
             />
@@ -268,9 +403,9 @@ High-fashion editorial magazine lookbook, natural diffused window daylight, clea
         <div className="p-4 bg-olive-pale/25 border border-olive/20 text-xs text-charcoal space-y-2 rounded">
           <strong className="block text-olive-dark font-medium">💡 วิธีใช้งานง่ายๆ ใน 3 ขั้นตอน:</strong>
           <ol className="list-decimal list-inside space-y-1 text-muted leading-relaxed">
-            <li>กดปุ่ม <strong>"📥 บันทึกรูปภาพ Moodboard"</strong> ด้านบน เพื่อเซฟรูปชุดลงเครื่อง</li>
-            <li>กดปุ่ม <strong>"🚀 เปิดใน ChatGPT"</strong> (ระบบจะนำ Prompt ไปใส่ในช่องแชทให้อัตโนมัติ)</li>
-            <li>แนบรูป Moodboard หรือรูปตัวเอง แล้วกดส่งเพื่อรับภาพคุณสวมชุดนี้ 4 มุมได้ทันที!</li>
+            <li>กดปุ่ม <strong>"📥 บันทึกรูปภาพ Moodboard"</strong> ด้านบน เพื่อเซฟรูปเสื้อผ้าทั้ง 4 ชิ้นลงเครื่อง</li>
+            <li>กดปุ่ม <strong>"🚀 เปิดใน ChatGPT"</strong> (ระบบจะนำ Prompt 4 มุมไปใส่ในช่องแชทให้อัตโนมัติ)</li>
+            <li>แนบรูป Moodboard (และรูปหน้าคุณถ้าต้องการ) แล้วกดส่งเพื่อรับภาพถ่ายคุณสวมชุดนี้ 4 มุมทันที!</li>
           </ol>
         </div>
 
