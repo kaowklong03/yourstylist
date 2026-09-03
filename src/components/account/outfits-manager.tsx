@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Heart, Calendar, ThumbsUp, ThumbsDown, Check, Sparkles, Shirt, MessageSquare, Trash2, History } from "lucide-react";
+import { Heart, Calendar, ThumbsUp, ThumbsDown, Check, Sparkles, Shirt, MessageSquare, Trash2, History, Camera } from "lucide-react";
 import type { SavedOutfit, WearLog, AIHistoryItem } from "@/lib/types";
+import { LookbookStudioModal, type LookbookOutfit } from "@/components/account/lookbook-studio-modal";
 
 interface Props {
   initialAIHistory: AIHistoryItem[];
@@ -32,6 +33,9 @@ export function OutfitsManager({ initialAIHistory, initialSavedOutfits, initialW
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [feedbackComment, setFeedbackComment] = useState("");
   const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+
+  // Lookbook Studio 4-Angle Modal state
+  const [lookbookOutfit, setLookbookOutfit] = useState<LookbookOutfit | null>(null);
 
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -298,14 +302,35 @@ export function OutfitsManager({ initialAIHistory, initialSavedOutfits, initialW
                             </div>
 
                             <div className="pt-3 border-t border-line flex items-center justify-between text-xs">
-                              <button
-                                type="button"
-                                onClick={() => handleSaveOutfitFromHistory(outfit, item.result?.id)}
-                                className="text-olive font-medium hover:underline inline-flex items-center gap-1"
-                              >
-                                <Heart className="w-3.5 h-3.5" />
-                                <span>บันทึกชุดนี้</span>
-                              </button>
+                              <div className="flex items-center gap-3">
+                                <button
+                                  type="button"
+                                  onClick={() => handleSaveOutfitFromHistory(outfit, item.result?.id)}
+                                  className="text-olive font-medium hover:underline inline-flex items-center gap-1"
+                                >
+                                  <Heart className="w-3.5 h-3.5" />
+                                  <span>บันทึกชุดนี้</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setLookbookOutfit({
+                                      name: outfit.name,
+                                      direction: outfit.direction,
+                                      notes: outfit.reason,
+                                      items: (outfit.items || []).map((it) => ({
+                                        role: it.role || "เสื้อผ้า",
+                                        description: it.itemDetails?.name || it.role || "ไอเทมแฟชั่น",
+                                      })),
+                                    })
+                                  }
+                                  className="text-charcoal hover:text-olive inline-flex items-center gap-1 font-medium"
+                                  title="สร้างภาพสวมชุด 4 มุมและเปิดใน ChatGPT"
+                                >
+                                  <Camera className="w-3.5 h-3.5 text-olive" />
+                                  <span>สตูดิโอ 4 มุม</span>
+                                </button>
+                              </div>
 
                               <button
                                 type="button"
@@ -384,6 +409,26 @@ export function OutfitsManager({ initialAIHistory, initialSavedOutfits, initialW
                   </div>
 
                   <div className="pt-3 border-t border-line flex items-center justify-between text-xs">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setLookbookOutfit({
+                          name: outfit.name,
+                          direction: outfit.direction,
+                          notes: outfit.notes ?? undefined,
+                          items: (outfit.items || []).map((it) => ({
+                            role: it.item_role || "เสื้อผ้า",
+                            description: it.item_description || "ไอเทมแฟชั่น",
+                          })),
+                        })
+                      }
+                      className="text-olive hover:underline inline-flex items-center gap-1 font-medium"
+                      title="สร้างภาพสวมชุด 4 มุมและเปิดใน ChatGPT"
+                    >
+                      <Camera className="w-3.5 h-3.5" />
+                      <span>สตูดิโอ 4 มุม</span>
+                    </button>
+
                     <button
                       type="button"
                       onClick={() => setFeedbackOutfitId(outfit.outfit_result_id || outfit.id)}
@@ -634,6 +679,13 @@ export function OutfitsManager({ initialAIHistory, initialSavedOutfits, initialW
           </form>
         </div>
       )}
+
+      {/* Lookbook Studio 4-Angle Modal */}
+      <LookbookStudioModal
+        isOpen={Boolean(lookbookOutfit)}
+        onClose={() => setLookbookOutfit(null)}
+        outfit={lookbookOutfit}
+      />
     </div>
   );
 }

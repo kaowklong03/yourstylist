@@ -22,9 +22,11 @@ import {
   Snowflake,
   Compass,
   SlidersHorizontal,
+  Camera,
 } from "lucide-react";
 import { SponsoredAdSection } from "@/components/sponsored-ad-section";
 import type { OutfitResponse, WardrobeItem, WardrobeOutfitResponse } from "@/lib/types";
+import { LookbookStudioModal, type LookbookOutfit } from "@/components/account/lookbook-studio-modal";
 
 export interface RoutineMemory {
   weekday: number;
@@ -154,6 +156,7 @@ export function StylistForm({
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [isLoadingWardrobe, setIsLoadingWardrobe] = useState(false);
   const [wardrobeFetchError, setWardrobeFetchError] = useState<string | null>(null);
+  const [lookbookOutfit, setLookbookOutfit] = useState<LookbookOutfit | null>(null);
 
   const effectiveActivity = initialRoutine?.usual_activity || initialActivityQuery || "";
   const resolvedActivity = effectiveActivity ? resolveActivityId(effectiveActivity) : "ไปคาเฟ่";
@@ -758,6 +761,30 @@ export function StylistForm({
                           <span className="font-medium text-charcoal">{outfit.shoes}</span>
                         </div>
                       </div>
+
+                      <div className="pt-3 border-t border-line flex items-center justify-between text-xs">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setLookbookOutfit({
+                              name: outfit.name,
+                              direction: outfit.direction,
+                              style: outfit.style,
+                              items: [
+                                { role: "เสื้อ", description: outfit.top },
+                                { role: "ท่อนล่าง", description: outfit.bottom },
+                                { role: "รองเท้า", description: outfit.shoes },
+                                ...(outfit.accessories ? [{ role: "เครื่องประดับ", description: Array.isArray(outfit.accessories) ? outfit.accessories.join(", ") : String(outfit.accessories) }] : []),
+                              ],
+                            })
+                          }
+                          className="text-olive hover:underline inline-flex items-center gap-1.5 font-medium cursor-pointer"
+                          title="สร้างภาพสวมชุด 4 มุมและเปิดใน ChatGPT"
+                        >
+                          <Camera className="w-3.5 h-3.5" />
+                          <span>สตูดิโอ 4 มุม (AI)</span>
+                        </button>
+                      </div>
                     </div>
                   </article>
                 );
@@ -925,12 +952,43 @@ export function StylistForm({
                           <span>{outfit.comfortNote}</span>
                         </p>
                       </div>
+
+                      <div className="pt-3 border-t border-line flex items-center justify-between text-xs">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setLookbookOutfit({
+                              name: outfit.name,
+                              direction: outfit.direction,
+                              style: outfit.style,
+                              notes: outfit.comfortNote,
+                              items: outfit.items.map((it) => ({
+                                role: it.role,
+                                description: it.itemDetails?.name || it.role || "เสื้อผ้าส่วนตัว",
+                                imageUrl: it.itemDetails?.signed_image_url || null,
+                              })),
+                            })
+                          }
+                          className="text-olive hover:underline inline-flex items-center gap-1.5 font-medium cursor-pointer"
+                          title="สร้างภาพสวมชุด 4 มุมและเปิดใน ChatGPT"
+                        >
+                          <Camera className="w-3.5 h-3.5" />
+                          <span>สตูดิโอ 4 มุม (AI)</span>
+                        </button>
+                      </div>
                   </article>
                 );
               })}
             </div>
           </div>
         )}
+
+        {/* Lookbook Studio 4-Angle Modal */}
+        <LookbookStudioModal
+          isOpen={Boolean(lookbookOutfit)}
+          onClose={() => setLookbookOutfit(null)}
+          outfit={lookbookOutfit}
+        />
       </section>
     </>
   );
