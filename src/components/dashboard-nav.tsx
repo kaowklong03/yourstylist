@@ -22,6 +22,11 @@ export function DashboardNav({
           ))}
         </nav>
       </div>
+      <div className="text-xs text-muted mb-3 space-y-0.5 pt-3 border-t border-line">
+        <span className="block font-medium text-charcoal">ติดต่อเจ้าหน้าที่</span>
+        <span className="block">LINE : @Yoursylist</span>
+        <span className="block">เบอร์ 0888888888</span>
+      </div>
       <form action="/api/auth/logout" method="post">
         <button className="button button-ghost" type="submit">
           ออกจากระบบ

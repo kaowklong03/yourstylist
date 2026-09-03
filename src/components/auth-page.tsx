@@ -16,6 +16,11 @@ export function AuthPage({
         <h1>
           {mode === "login" ? "ยินดีต้อนรับกลับ" : customer ? "เริ่มแต่งตัวให้วันนี้" : "เปิดร้านบน YourStylist"}
         </h1>
+        {!customer && mode === "register" && (
+          <p className="text-xl font-medium text-olive-dark my-2 tracking-wide">
+            199 บาท / เดือน
+          </p>
+        )}
         <p>
           {customer
             ? "บันทึกความชอบ ดูประวัติคำแนะนำ และเก็บโฆษณาที่ถูกใจไว้ในบัญชีเดียว"

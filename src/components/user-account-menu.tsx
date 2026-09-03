@@ -211,6 +211,15 @@ export function UserAccountMenu({ user }: { user: CurrentUser }) {
             )}
           </div>
 
+          {/* Contact Support for Customer & Merchant */}
+          {(user.role === "customer" || user.role === "merchant") && (
+            <div className="px-3 py-2 border-t border-line bg-paper/40 text-[11px] text-muted space-y-0.5">
+              <span className="block font-medium text-charcoal">ติดต่อเจ้าหน้าที่</span>
+              <span className="block">LINE : @Yoursylist</span>
+              <span className="block">เบอร์ 0888888888</span>
+            </div>
+          )}
+
           {/* Logout Action */}
           <div className="pt-1 border-t border-line">
             <form action="/api/auth/logout" method="post">

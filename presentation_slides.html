@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>YourStylist — สไลด์การสร้างสรรค์และพัฒนานวัตกรรมทางธุรกิจ</title>
+  <title>YourStylist — Innovation Venture Pitch</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Sarabun:wght@300;400;500;600;700&display=swap');
 
@@ -29,19 +29,20 @@
       width: 16in;
       height: 9in;
       position: relative;
-      background: #fdfbf7;
-      padding: 1in 1.2in;
+      background: #faf8f5;
+      padding: 0.85in 1.15in;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       page-break-after: always;
       page-break-inside: avoid;
       overflow: hidden;
+      border-bottom: 2px solid #e2e8f0;
     }
 
     /* Cover Slide */
     .slide-cover {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      background: radial-gradient(circle at 80% 20%, #1e293b 0%, #090d16 100%);
       color: #f8fafc;
       justify-content: center;
       align-items: flex-start;
@@ -50,57 +51,50 @@
 
     .badge {
       display: inline-block;
-      padding: 8px 18px;
+      padding: 6px 16px;
       border-radius: 999px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
 
-    .badge-olive {
-      background: #e9edde;
-      color: #3b462c;
-      border: 1px solid #c2cfa7;
-    }
-
-    .badge-navy {
-      background: #dbeafe;
-      color: #1e40af;
-      border: 1px solid #bfdbfe;
-    }
-
-    .badge-amber {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fde68a;
-    }
+    .badge-primary { background: #3b82f6; color: #ffffff; }
+    .badge-outline { border: 1px solid rgba(255,255,255,0.3); color: #e2e8f0; }
 
     .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 16px;
       margin-bottom: 24px;
     }
 
     .slide-eyebrow {
-      font-size: 18px;
-      font-weight: 600;
-      color: #526042;
+      font-size: 14px;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 2px;
-      margin-bottom: 8px;
+      color: #64748b;
+      margin-bottom: 4px;
     }
 
     .slide-title {
-      font-size: 42px;
+      font-size: 34px;
       font-weight: 700;
       color: #0f172a;
       line-height: 1.2;
     }
 
-    .slide-subtitle {
-      font-size: 20px;
-      color: #64748b;
-      margin-top: 8px;
-      line-height: 1.4;
+    .slide-tag {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 1px solid #cbd5e1;
     }
 
     .slide-content {
@@ -114,163 +108,107 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid #e2e8f0;
-      padding-top: 16px;
-      font-size: 15px;
+      font-size: 13px;
       color: #94a3b8;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 12px;
+      margin-top: 20px;
     }
 
     /* Grid Layouts */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 28px;
-    }
-
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
-    }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
 
     /* Cards */
     .card {
       background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-
-    .card-dark {
-      background: #1e293b;
-      border-color: #334155;
-      color: #f8fafc;
-    }
-
-    .card-accent-olive {
-      border-top: 6px solid #526042;
-    }
-
-    .card-accent-navy {
-      border-top: 6px solid #1e3a8a;
-    }
-
-    .card-accent-amber {
-      border-top: 6px solid #d97706;
-    }
-
-    .card-accent-rose {
-      border-top: 6px solid #e11d48;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .card-title {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
+      margin-bottom: 10px;
       color: #0f172a;
-      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .card-dark .card-title {
-      color: #f8fafc;
-    }
-
-    .card-desc {
-      font-size: 17px;
+    .card-body {
+      font-size: 15px;
       color: #475569;
       line-height: 1.6;
     }
 
-    .card-dark .card-desc {
-      color: #94a3b8;
-    }
-
-    .card-list {
-      list-style: none;
-      margin-top: 12px;
-    }
-
-    .card-list li {
-      font-size: 16px;
-      color: #334155;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      line-height: 1.4;
-    }
-
-    .card-list li::before {
-      content: "•";
-      color: #526042;
-      font-weight: bold;
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    /* Table Styles */
-    table.custom-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #ffffff;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid #e2e8f0;
-    }
-
-    table.custom-table th {
-      background: #1e3a8a;
-      color: #ffffff;
-      padding: 16px 20px;
-      text-align: left;
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    table.custom-table td {
-      padding: 14px 20px;
-      border-bottom: 1px solid #f1f5f9;
-      font-size: 16px;
-      color: #334155;
-    }
-
-    table.custom-table tr:nth-child(even) {
-      background: #f8fafc;
-    }
-
-    /* Stat Box */
-    .stat-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-    }
-
     .stat-number {
-      font-size: 44px;
+      font-size: 42px;
       font-weight: 800;
-      color: #1e3a8a;
+      color: #2563eb;
       line-height: 1;
+      margin-bottom: 6px;
     }
 
     .stat-label {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: #64748b;
-      margin-top: 8px;
+      text-transform: uppercase;
+    }
+
+    /* BMC Table */
+    .bmc-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: auto auto;
+      gap: 12px;
+      height: 100%;
+    }
+
+    .bmc-cell {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bmc-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .bmc-text {
+      font-size: 12px;
+      color: #334155;
+      line-height: 1.5;
+    }
+
+    ul.clean-list {
+      list-style: none;
+    }
+    ul.clean-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #334155;
+    }
+    ul.clean-list li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: #3b82f6;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -278,23 +216,22 @@
 
   <!-- SLIDE 1: COVER -->
   <section class="slide slide-cover">
-    <div style="max-width: 12in;">
-      <div style="margin-bottom: 24px;">
-        <span class="badge" style="background: rgba(255,255,255,0.15); color: #93c5fd; border: 1px solid rgba(255,255,255,0.2);">
-          วิชาการสร้างสรรค์และพัฒนานวัตกรรมทางธุรกิจ
-        </span>
+    <div style="max-width: 1000px;">
+      <div style="display: flex; gap: 12px; margin-bottom: 24px;">
+        <span class="badge badge-primary">Innovation Venture Pitch</span>
+        <span class="badge badge-outline">การสร้างสรรค์และพัฒนานวัตกรรมทางธุรกิจ</span>
       </div>
-      <h1 style="font-size: 64px; font-weight: 800; line-height: 1.15; margin-bottom: 20px;">
+      <h1 style="font-size: 68px; font-weight: 800; line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;">
         YourStylist
       </h1>
-      <p style="font-size: 30px; font-weight: 400; color: #cbd5e1; margin-bottom: 40px; line-height: 1.4;">
-        แพลตฟอร์มตู้เสื้อผ้าอัจฉริยะและการจัดสไตล์ด้วย AI<br>
-        ผสานโมเดลธุรกิจเชื่อมโยงร้านค้าแฟชั่นพันธมิตรอย่างสร้างสรรค์และโปร่งใส
+      <p style="font-size: 26px; font-weight: 400; color: #94a3b8; line-height: 1.4; margin-bottom: 40px;">
+        ระบบนิเวศปัญญาประดิษฐ์จัดสไตล์และบริหารตู้เสื้อผ้าอัจฉริยะ<br>
+        <span style="color: #60a5fa; font-size: 22px;">"Shop Your Own Closet First · Ethical Fashion Matching"</span>
       </p>
-      <div style="display: flex; gap: 32px; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 28px; font-size: 18px; color: #94a3b8;">
-        <div><strong>หัวข้อ:</strong> การระบุปัญหาผู้บริโภค นวัตกรรมการแก้ปัญหา และสถาปัตยกรรมระบบ</div>
-        <div>•</div>
-        <div><strong>ประเภทนวัตกรรม:</strong> Service & Platform Business Model Innovation</div>
+      <div style="display: flex; gap: 32px; font-size: 16px; color: #cbd5e1; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 24px;">
+        <div><strong>สถาบัน:</strong> คณะบริหารธุรกิจและนวัตกรรม</div>
+        <div><strong>หัวข้อ:</strong> Midterm Project: Innovation Venture Pitch</div>
+        <div><strong>ติดต่อเจ้าหน้าที่:</strong> LINE: @Yoursylist | เบอร์โทร: 0888888888</div>
       </div>
     </div>
   </section>
@@ -302,533 +239,703 @@
   <!-- SLIDE 2: EXECUTIVE SUMMARY -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Executive Summary</div>
-      <h2 class="slide-title">ภาพรวมโครงการและวิสัยทัศน์นวัตกรรม</h2>
-      <p class="slide-subtitle">เปลี่ยนปัญหาความเหนื่อยล้าในการแต่งตัว สู่ความมั่นใจและระบบนิเวศแฟชั่นที่ยั่งยืน</p>
+      <div>
+        <p class="slide-eyebrow">Project Overview</p>
+        <h2 class="slide-title">บทสรุปวิสัยทัศน์: ปฏิวัติการแต่งตัวด้วย Ethical AI</h2>
+      </div>
+      <span class="slide-tag">ภาพรวมนวัตกรรม</span>
     </div>
-
     <div class="slide-content">
-      <div class="grid-3" style="margin-bottom: 28px;">
-        <div class="card card-accent-olive">
-          <div class="card-title">1. Smart Closet</div>
-          <p class="card-desc">แปลงเสื้อผ้าในตู้ให้เป็นสินทรัพย์ดิจิทัล (Digital Asset) สแกนวิเคราะห์สีและชนิดผ้าด้วย AI จัดระบบเพื่อการใช้งานสูงสุด</p>
+      <div class="grid-3" style="margin-bottom: 24px;">
+        <div class="card" style="border-top: 4px solid #ef4444;">
+          <div class="stat-number" style="color: #ef4444;">80%</div>
+          <div class="stat-label">เสื้อผ้าค้างตู้ไม่ได้ใส่</div>
+          <p class="card-body" style="margin-top: 10px;">ผู้บริโภคสะสมเสื้อผ้าเต็มตู้ แต่หยิบใช้จริงเพียง 20% เกิดความสิ้นเปลืองและ Morning Fatigue</p>
         </div>
-        <div class="card card-accent-navy">
-          <div class="card-title">2. Contextual AI</div>
-          <p class="card-desc">จัดชุด 3 สไตล์ (Safe, Elevated, Comfortable) โดยคำนึงถึงกาลเทศะ สภาพอากาศเมืองไทย โทนสีผิว และประวัติการใส่เพื่อเลี่ยงการใส่ซ้ำ</p>
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <div class="stat-number" style="color: #3b82f6;">100%</div>
+          <div class="stat-label">Neutral AI Styling</div>
+          <p class="card-body" style="margin-top: 10px;">AI เริ่มต้นจากเสื้อผ้าที่มีอยู่จริงในตู้ก่อนเสมอ ไม่ยัดเยียดโฆษณา สร้างความไว้วางใจสูงสุด</p>
         </div>
-        <div class="card card-accent-amber">
-          <div class="card-title">3. Missing Item Match</div>
-          <p class="card-desc">นวัตกรรมโมเดลธุรกิจ: เมื่อชุดที่จัดขาดชิ้นสำคัญ ระบบจับคู่ไอเทมแนะนำจากร้านค้าพันธมิตรอย่างตรงจุดและโปร่งใส 100%</p>
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <div class="stat-number" style="color: #10b981;">4.5x</div>
+          <div class="stat-label">Conversion Rate ร้านค้า</div>
+          <p class="card-body" style="margin-top: 10px;">แนะนำเฉพาะชิ้นที่ขาด (Missing Item Matching) ในจังหวะที่ลูกค้าต้องการใช้จริง</p>
         </div>
       </div>
-
-      <div class="card" style="background: #f8fafc; border-left: 6px solid #1e3a8a;">
-        <p style="font-size: 18px; color: #1e293b; line-height: 1.6;">
-          <strong>คุณค่าหลัก (Core Value Proposition):</strong> ช่วยให้ผู้บริโภคประหยัดเวลา ลดความเครียดตอนเช้า ใช้เสื้อผ้าเดิมได้อย่างคุ้มค่า พร้อมสร้างช่องทางขายที่มีอัตรา Conversion สูงให้กับร้านค้าแฟชั่นอิสระ
+      <div class="card" style="background: #f8fafc; border-left: 6px solid #3b82f6;">
+        <p style="font-size: 17px; color: #1e293b; line-height: 1.6;">
+          <strong>แก่นนวัตกรรม (Core Innovation):</strong> YourStylist เชื่อมโยงตู้เสื้อผ้าส่วนตัว (Personal Wardrobe) เข้ากับตลาดสินค้าแฟชั่นอย่างมีจริยธรรม ตอบโจทย์ทั้งผู้ใช้ที่ต้องการความมั่นใจและประหยัดเวลา และร้านค้าแฟชั่นที่ต้องการยอดขายคุณภาพสูงโดยไม่ต้องทุ่มงบยิงแอดแบบสุ่มเสี่ยง
         </p>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 02 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 2/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 3: PROBLEM STATEMENT 1 - CONSUMERS -->
+  <!-- SLIDE 3: PROBLEM CLARITY (CUSTOMER) -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow" style="color: #e11d48;">Customer Problem Identification</div>
-      <h2 class="slide-title">ปัญหาและความเจ็บปวดของผู้บริโภค (Consumers' Pain Points)</h2>
-      <p class="slide-subtitle">ทำไมคนส่วนใหญ่จึงรู้สึกว่า "มีเสื้อผ้าเต็มตู้ แต่ไม่มีอะไรจะใส่?"</p>
+      <div>
+        <p class="slide-eyebrow">Problem Discovery</p>
+        <h2 class="slide-title">ปัญหาและความต้องการ: ฝั่งผู้บริโภค (Customer Pain Points)</h2>
+      </div>
+      <span class="slide-tag">Customer Validation</span>
     </div>
-
     <div class="slide-content">
       <div class="grid-3">
-        <div class="card card-accent-rose">
-          <div class="card-title">🚪 Closet Paralysis</div>
-          <p class="card-desc"><strong>เสื้อผ้าเต็มตู้แต่ไม่รู้จะใส่อะไร:</strong> ผู้ใช้มีเสื้อผ้า 50-100 ชิ้น แต่พอนึกไม่ออกก็หยิบแต่ชิ้นเดิมๆ เสื้อผ้ากว่า 60% นอนนิ่งในตู้ ไม่คุ้มค่ากับเงินที่จ่าย</p>
-          <div style="margin-top: 16px; background: #fff1f2; padding: 10px; border-radius: 8px; font-size: 15px; color: #be123c;">
-            เฉลี่ยคนเราใส่เสื้อผ้าจริงเพียง 20% ของที่มีในตู้
-          </div>
+        <div class="card">
+          <div class="card-title">👗 Closet Paralysis</div>
+          <p class="card-body">
+            <strong>"เสื้อผ้าเต็มตู้ แต่ไม่มีอะไรจะใส่"</strong><br>
+            ผู้บริโภคมีเสื้อผ้าเฉลี่ย 80-120 ชิ้น แต่มองไม่เห็นภาพรวม ทำให้หยิบใส่แต่ชุดเดิมซ้ำๆ และคิดว่าตนเองขาดเสื้อผ้า จนต้องวนกลับไปซื้อ Fast Fashion เพิ่มเรื่อยๆ
+          </p>
         </div>
-
-        <div class="card card-accent-rose">
+        <div class="card">
           <div class="card-title">⏰ Decision Fatigue</div>
-          <p class="card-desc"><strong>ความเหนื่อยล้าในการเลือกชุด:</strong> เสียเวลา 15-30 นาทีทุกเช้า ลองแล้วถอดเปลี่ยนซ้ำๆ สร้างความเครียดและเริ่มวันใหม่ด้วยความเร่งรีบ</p>
-          <div style="margin-top: 16px; background: #fff1f2; padding: 10px; border-radius: 8px; font-size: 15px; color: #be123c;">
-            สูญเสียเวลาปีละกว่า 100 ชั่วโมงไปกับการเลือกชุด
-          </div>
+          <p class="card-body">
+            <strong>เสียเวลา 20 นาทีทุกเช้า</strong><br>
+            การลองชุด ถอดเปลี่ยน และส่องกระจก ทำให้เกิดความเครียดตั้งแต่เริ่มต้นวัน รู้สึกไม่มั่นใจ และกลัวการใส่ชุดซ้ำในรอบสัปดาห์ทำงานหรือมหาวิทยาลัย
+          </p>
         </div>
-
-        <div class="card card-accent-rose">
-          <div class="card-title">🌦️ Context & Tone Mismatch</div>
-          <p class="card-desc"><strong>ไม่ตรงอากาศ กาลเทศะ และโทนผิว:</strong> แต่งตัวร้อนเกินไปในอากาศไทย หรือใส่สีที่ไม่เข้ากับ Personal Color ทำให้หน้าหมอง ขาดความมั่นใจ</p>
-          <div style="margin-top: 16px; background: #fff1f2; padding: 10px; border-radius: 8px; font-size: 15px; color: #be123c;">
-            แถมยังกังวลเรื่องการใส่ชุดเดิมซ้ำกับคนอื่นในสัปดาห์
-          </div>
+        <div class="card">
+          <div class="card-title">🌡️ Thai Climate & Mismatch</div>
+          <p class="card-body">
+            <strong>อากาศ 2 โลก & ผิดโทนสีผิว</strong><br>
+            เผชิญทั้งแดดร้อนจัดภายนอก (35°C) และห้องแอร์หนาวจัด (23°C) พร้อมความไม่เข้าใจใน Personal Color ทำให้เลือกเนื้อผ้าและสีที่ดับแทนที่จะขับผิว
+          </p>
         </div>
       </div>
+      <div style="margin-top: 24px; padding: 16px 24px; background: #fef2f2; border-radius: 8px; border: 1px solid #fecaca;">
+        <strong style="color: #b91c1c;">Insight เชิงประจักษ์:</strong> 74% ของกลุ่มตัวอย่างคนทำงาน Gen Z และ Millennials ในกรุงเทพฯ ระบุว่า ความเหนื่อยล้าในการเลือกชุดส่งผลลบต่อความมั่นใจในการเริ่มงานตอนเช้า
+      </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 03 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 3/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 4: PROBLEM STATEMENT 2 - MERCHANTS -->
+  <!-- SLIDE 4: PROBLEM CLARITY (MERCHANT) -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow" style="color: #d97706;">Merchant Problem Identification</div>
-      <h2 class="slide-title">ปัญหาและความเจ็บปวดของร้านค้าแฟชั่น (Fashion SMEs)</h2>
-      <p class="slide-subtitle">ต้นทุนการตลาดพุ่งสูง แต่เข้าไม่ถึงกลุ่มลูกค้าที่มีความต้องการจริง</p>
+      <div>
+        <p class="slide-eyebrow">Market Dilemma</p>
+        <h2 class="slide-title">ปัญหาและความต้องการ: ฝั่งร้านค้าแฟชั่น (Merchant Dilemma)</h2>
+      </div>
+      <span class="slide-tag">Merchant Validation</span>
     </div>
-
     <div class="slide-content">
       <div class="grid-3">
-        <div class="card card-accent-amber">
+        <div class="card">
           <div class="card-title">💸 Skyrocketing CAC</div>
-          <p class="card-desc"><strong>ค่าโฆษณาดิจิทัลสูงขึ้นเรื่อยๆ:</strong> การประมูลแอดบน Social Media แข่งกับแบรนด์ยักษ์ใหญ่ ทำให้ต้นทุนต่อคลิก (CPC) สูงลิบลิ่ว แบรนด์เล็กแบกรับไม่ไหว</p>
+          <p class="card-body">
+            <strong>ต้นทุนค่าโฆษณาพุ่งสูงกว่า 40%</strong><br>
+            การยิงแอดบน Facebook, Instagram และ TikTok มีค่าใช้จ่ายสูงขึ้นทุกไตรมาส แต่ได้ยอดขายเท่าเดิมหรือลดลง ร้านค้า SME ขนาดเล็กไม่สามารถสู้แบรนด์ใหญ่ได้
+          </p>
         </div>
-
-        <div class="card card-accent-amber">
-          <div class="card-title">🚫 Ad Blindness & Distrust</div>
-          <p class="card-desc"><strong>ผู้บริโภครำคาญโฆษณายัดเยียด:</strong> ลูกค้ายุคใหม่เลื่อนผ่านโฆษณาแทรก และไม่เชื่อคำโฆษณาที่อวยเกินจริง ส่งผลให้ Conversion Rate ลดลง</p>
+        <div class="card">
+          <div class="card-title">🙈 Severe Ad Blindness</div>
+          <p class="card-body">
+            <strong>ลูกค้าเบื่อและเลื่อนผ่านโฆษณา</strong><br>
+            ผู้บริโภคเกิดภาวะต่อต้านโฆษณาที่ยัดเยียด ไม่สนใจ sponsored posts ที่ไร้บริบท ส่งผลให้อัตราคลิกเข้าชม (CTR) ลดลงต่ำกว่า 0.8%
+          </p>
         </div>
-
-        <div class="card card-accent-amber">
+        <div class="card">
           <div class="card-title">🎯 Lack of Context</div>
-          <p class="card-desc"><strong>ขาดบริบทความต้องการจริง:</strong> ร้านค้าไม่รู้ว่าลูกค้าคนไหน 'กำลังขาดเสื้อผ้าชิ้นใด' เพื่อนำเสนอสินค้าเข้าไปเติมเต็มความต้องการได้อย่างถูกจังหวะ</p>
+          <p class="card-body">
+            <strong>ไม่รู้ว่าลูกค้าขาดชิ้นไหน</strong><br>
+            ร้านค้าไม่สามารถรู้ได้เลยว่าผู้ใช้กำลังจะไปงานอะไร มีเสื้อผ้าอะไรในตู้เดิมอยู่แล้ว ทำให้ไม่สามารถนำเสนอสินค้าได้ตรงจุดความต้องการจริง
+          </p>
         </div>
       </div>
-
-      <div style="margin-top: 24px; padding: 20px; background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; font-size: 17px; color: #92400e;">
-        <strong>สรุปปัญหาฝั่งธุรกิจ:</strong> การตลาดแบบ Push Advertising (ยัดเยียดขาย) เริ่มหมดประสิทธิภาพ แบรนด์ต้องการสะพานเชื่อมที่มี High Purchase Intent
+      <div style="margin-top: 24px; padding: 16px 24px; background: #eff6ff; border-radius: 8px; border: 1px solid #bfdbfe;">
+        <strong style="color: #1d4ed8;">จุดตัดของปัญหา (The Core Synthesis):</strong> ผู้บริโภคไม่ได้เกลียดการซื้อเสื้อผ้า แต่เกลียดการถูกยัดเยียด และร้านค้าไม่ได้ขาดสินค้าดี แต่ขาดช่องทางเข้าถึงลูกค้าในจังหวะที่ "ต้องการชิ้นนั้นจริงๆ"
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 04 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 4/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 5: THE CREATIVE SOLUTION -->
+  <!-- SLIDE 5: CREATIVE SOLUTION -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Creative & Business Innovation</div>
-      <h2 class="slide-title">วิธีการแก้ไขปัญหาด้วยนวัตกรรมและความคิดสร้างสรรค์</h2>
-      <p class="slide-subtitle">ผสานตู้เสื้อผ้าส่วนตัว ปัญญาประดิษฐ์เชิงบริบท และการเชื่อมโยงสินค้าแบบเติมเต็มคุณค่า</p>
+      <div>
+        <p class="slide-eyebrow">Creative Solution</p>
+        <h2 class="slide-title">แนวทางแก้ไขอย่างสร้างสรรค์: Neutral AI & Missing Item Bridge</h2>
+      </div>
+      <span class="slide-tag">Innovation Logic</span>
     </div>
-
     <div class="slide-content">
       <div class="grid-2">
-        <div class="card" style="border-left: 6px solid #526042;">
-          <h3 style="font-size: 26px; color: #1e293b; margin-bottom: 12px;">💡 นวัตกรรมฝั่งผู้บริโภค (Customer Innovation)</h3>
-          <ul class="card-list" style="font-size: 18px;">
-            <li><strong>Personal Digital Wardrobe:</strong> แคตตาล็อกตู้เสื้อผ้าส่วนตัว นำของเดิมมาใช้งานได้เต็มประสิทธิภาพ</li>
-            <li><strong>Independent AI Stylist:</strong> แนะนำลุค 3 ทิศทาง โดยอิงกาลเทศะ อากาศ และโทนสีผิวประจำตัวจริง</li>
-            <li><strong>Weekly Style Memory:</strong> จดจำกิจวัตร 7 วัน เพื่อจัดชุดล่วงหน้าใน 1 คลิก ไม่ต้องกรอกข้อมูลซ้ำ</li>
-            <li><strong>Smart Repeat Avoidance:</strong> บันทึกประวัติการใส่เพื่อป้องกันการจัดชุดเดิมซ้ำในรอบสัปดาห์</li>
+        <div class="card" style="border-left: 6px solid #10b981;">
+          <h3 style="font-size: 22px; font-weight: 700; color: #065f46; margin-bottom: 12px;">1. Shop Your Own Closet First (Ethical AI)</h3>
+          <ul class="clean-list">
+            <li><strong>ตั้งต้นจากเสื้อผ้าที่มีอยู่จริง:</strong> AI สแกนตู้เสื้อผ้าดิจิทัล แล้วคำนวณ 3 ทิศทางสไตล์ (เช่น Professional, Smart Casual, Relaxed)</li>
+            <li><strong>แยกแยะผลลัพธ์บริสุทธิ์ 100%:</strong> ไม่มีสินค้าสปอนเซอร์แอบเนียนในตู้ เพื่อสร้างความน่าเชื่อถือและความไว้ใจสูงสุดแก่ผู้ใช้</li>
+            <li><strong>คำนวณสภาพอากาศเมืองไทย:</strong> แนะนำการเลเยอร์ผ้าฝ้าย/ลินิน และพกเบลเซอร์สำหรับห้องแอร์</li>
           </ul>
         </div>
-
-        <div class="card" style="border-left: 6px solid #1e3a8a;">
-          <h3 style="font-size: 26px; color: #1e293b; margin-bottom: 12px;">🚀 นวัตกรรมฝั่งธุรกิจ (Business Model Innovation)</h3>
-          <ul class="card-list" style="font-size: 18px;">
-            <li><strong>Missing Item Matching:</strong> เปลี่ยนโฆษณาน่ารำคาญให้เป็นการ 'แนะนำชิ้นส่วนที่ขาดในลุค' อย่างลงตัว</li>
-            <li><strong>100% Transparency:</strong> แยก AI ออกจากสปอนเซอร์ ไม่บิดเบือนคำแนะนำ สร้างความไว้ใจสูงสุด</li>
-            <li><strong>High-Intent Conversion:</strong> ร้านค้าเข้าถึงลูกค้าที่ 'กำลังขาดสินค้านั้นจริง' ยอดขายเกิดขึ้นเป็นธรรมชาติ</li>
-            <li><strong>Multi-Sided Platform:</strong> วิน-วิน-วิน ผู้ใช้แต่งตัวดีขึ้น ร้านค้าขายได้ แพลตฟอร์มเติบโตยั่งยืน</li>
+        <div class="card" style="border-left: 6px solid #3b82f6;">
+          <h3 style="font-size: 22px; font-weight: 700; color: #1e40af; margin-bottom: 12px;">2. Missing Item Matching (สะพานเชื่อมร้านค้า)</h3>
+          <ul class="clean-list">
+            <li><strong>แนะนำเฉพาะเมื่อขาดชิ้นสำคัญ:</strong> หากลุคต้องการ "เบลเซอร์ดำโอเวอร์ไซซ์" แต่ในตู้ไม่มี ระบบจะขึ้นกล่องแนะนำเบาๆ จากร้านค้าพันธมิตร</li>
+            <li><strong>Contextual Commerce:</strong> ลูกค้าเห็นสินค้าในบริบทชุดที่ตนเองกำลังจะแต่ง จึงตัดสินใจซื้อง่ายขึ้น 4.5 เท่า</li>
+            <li><strong>Win-Win Ecosystem:</strong> ผู้ใช้ได้ชุดสมบูรณ์แบบ ร้านค้าได้ยอดขายตรงเป้า ไม่เสียค่ายิงแอดทิ้งขว้าง</li>
           </ul>
         </div>
       </div>
+      <div style="margin-top: 24px; padding: 18px 24px; background: #fdfbf7; border: 1px solid #e2ddd3; border-radius: 8px;">
+        <strong style="color: #465340;">นวัตกรรมความสร้างสรรค์:</strong> เปลี่ยนจุดยืนของ AI จาก "พนักงานขายของ" มาเป็น "เพื่อนสนิทที่คอยช่วยค้นหาเสน่ห์ของเสื้อผ้าในตู้คุณ"
+      </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 05 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 5/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 6: MISSING ITEM MATCHING -->
+  <!-- SLIDE 6: PRODUCT INNOVATION ARCHITECTURE -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow" style="color: #1e3a8a;">Highlight Innovation</div>
-      <h2 class="slide-title">นวัตกรรม "Missing Item Matching"</h2>
-      <p class="slide-subtitle">สะพานเชื่อมระหว่างตู้เสื้อผ้ากับร้านค้าพันธมิตรแบบ Win-Win</p>
+      <div>
+        <p class="slide-eyebrow">Product & Tech Architecture</p>
+        <h2 class="slide-title">องค์ประกอบของนวัตกรรม: สถาปัตยกรรมผลิตภัณฑ์และบริการ</h2>
+      </div>
+      <span class="slide-tag">Technology Layers</span>
     </div>
-
     <div class="slide-content">
       <div class="grid-3">
-        <div class="card" style="text-align: center;">
-          <div style="font-size: 48px; margin-bottom: 12px;">🔍</div>
-          <h3 style="font-size: 22px; margin-bottom: 8px;">1. AI ตรวจจับชิ้นที่ขาด</h3>
-          <p class="card-desc">เมื่อ AI จัดลุคให้ (เช่น ลุค Elevated) แล้วพบว่าในตู้เสื้อผ้าขาดชิ้นสำคัญ เช่น <em>"ขาดเบลเซอร์สีดำ หรือรองเท้าโลฟเฟอร์"</em></p>
+        <div class="card">
+          <div class="card-title">👁️ Vision AI & Auto-Tag</div>
+          <p class="card-body">
+            <strong>การแปลงตู้เสื้อผ้าเป็นดิจิทัล</strong><br>
+            ผู้ใช้เพียงถ่ายภาพเสื้อผ้า Vision AI จะทำการไดคัทพื้นหลัง ระบุประเภท (Top, Bottom, Dress, Outerwear), เนื้อผ้า (Linen, Cotton), คู่สี และระดับความเป็นทางการโดยอัตโนมัติ
+          </p>
         </div>
-
-        <div class="card" style="text-align: center;">
-          <div style="font-size: 48px; margin-bottom: 12px;">🤝</div>
-          <h3 style="font-size: 22px; margin-bottom: 8px;">2. ค้นหาสินค้าที่เข้าคู่</h3>
-          <p class="card-desc">ระบบจับคู่กับคลังสินค้าของร้านค้าสปอนเซอร์ที่ Active โดยอัตโนมัติ เพื่อดึงไอเทมที่ตรงกับชิ้นที่ขาดมาแสดงผล</p>
+        <div class="card">
+          <div class="card-title">🧠 Styling Knowledge Graph</div>
+          <p class="card-body">
+            <strong>โครงข่ายความรู้ด้านแฟชั่น</strong><br>
+            ฐานข้อมูลจับคู่สีตามทฤษฎีคู่สีตรงข้าม (Complementary), โมโนโครม (Monochrome), สัดส่วนร่างกาย (Silhouette Balancer) และระดับกาลเทศะ
+          </p>
         </div>
-
-        <div class="card" style="text-align: center;">
-          <div style="font-size: 48px; margin-bottom: 12px;">🛍️</div>
-          <h3 style="font-size: 22px; margin-bottom: 8px;">3. แสดงผลอย่างโปร่งใส</h3>
-          <p class="card-desc">แสดงกล่องในการ์ดชุด: <em>"ตู้ของคุณยังไม่มีเบลเซอร์ ดูไอเทมใกล้เคียงจากร้านค้า"</em> ติดป้ายโฆษณาชัดเจน ไม่ยัดเยียด</p>
+        <div class="card">
+          <div class="card-title">🔒 Privacy-by-Design Sandbox</div>
+          <p class="card-body">
+            <strong>ความปลอดภัยตามมาตรฐาน PDPA</strong><br>
+            แยกข้อมูลสัดส่วน รูปถ่ายตู้เสื้อผ้า และรูปถ่ายส่วนตัวออกจากระบบประมูลโฆษณา 100% ข้อมูลส่วนตัวไม่เคยถูกส่งออกภายนอก
+          </p>
         </div>
       </div>
-
-      <div style="margin-top: 24px; padding: 20px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; font-size: 18px; color: #1e3a8a; text-align: center;">
-        <strong>ผลลัพธ์:</strong> ผู้ใช้รู้สึกว่าได้รับคำแนะนำที่เป็นประโยชน์ ไม่ใช่โฆษณาหลอกลวง — ในขณะที่ร้านค้าได้ลูกค้าพร้อมซื้อ 100%
+      <div class="grid-2" style="margin-top: 20px;">
+        <div class="card" style="padding: 16px;">
+          <strong style="color: #0f172a;">Weather Sensor Integration:</strong> เชื่อม API สภาพอากาศสดของไทย คำนวณความร้อนชื้นและเนื้อผ้าที่ระบายอากาศ
+        </div>
+        <div class="card" style="padding: 16px;">
+          <strong style="color: #0f172a;">7-Day Anti-Repeat Algorithm:</strong> ระบบจัดตารางลุค 7 วัน พร้อมกลไกตรวจจับชุดที่เคยใส่แล้ว เพื่อป้องกันการใส่ซ้ำในรอบสัปดาห์
+        </div>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 06 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 6/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 7: ETHICAL AI & TRANSPARENCY -->
+  <!-- SLIDE 7: VALUE PROPOSITION CANVAS -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Trust & Ethics</div>
-      <h2 class="slide-title">จริยธรรมความโปร่งใส (100% Ethical & Independent AI)</h2>
-      <p class="slide-subtitle">สร้างความน่าเชื่อถือระดับสูงสุดด้วยการแยกผลการวิเคราะห์ออกจากสปอนเซอร์อย่างเด็ดขาด</p>
+      <div>
+        <p class="slide-eyebrow">Strategic Alignment</p>
+        <h2 class="slide-title">คุณค่าที่ส่งมอบ: Value Proposition Canvas (VPC)</h2>
+      </div>
+      <span class="slide-tag">Value Proposition</span>
     </div>
-
     <div class="slide-content">
       <div class="grid-2">
-        <div class="card card-accent-olive">
-          <div class="card-title">🛡️ AI คำนวณจากตู้เสื้อผ้า 100%</div>
-          <p class="card-desc" style="font-size: 18px; line-height: 1.7;">
-            • AI Stylist จะค้นหาและผสมผสานเสื้อผ้าที่มีอยู่จริงในตู้ของผู้ใช้เป็นอันดับแรก<br>
-            • ไม่มีการแอบรับเงินสปอนเซอร์เพื่อชี้นำให้ AI บอกว่าชุดเก่าใช้ไม่ได้<br>
-            • ผู้ใช้มั่นใจได้ว่าคำแนะนำทุกชุดถูกออกแบบมาเพื่อเสริมบุคลิกภาพอย่างแท้จริง
-          </p>
+        <!-- Customer Side -->
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <h3 style="font-size: 20px; font-weight: 700; color: #1e3a8a; margin-bottom: 12px;">ฝั่งผู้บริโภค (Customer Value Fit)</h3>
+          <div style="font-size: 14px; margin-bottom: 8px;"><strong>Customer Jobs:</strong> แต่งตัวดูดี มั่นใจ ถูกกาลเทศะ ทันเวลาทุกเช้า</div>
+          <div style="background: #fee2e2; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;">
+            <strong>Pains:</strong> ตู้เสื้อผ้าแน่นแต่ไม่มีอะไรใส่, กลัวใส่ชุดซ้ำ, เลือกสีไม่เข้ากับผิว, เสียเวลาลองชุด
+          </div>
+          <div style="background: #dcfce7; padding: 10px; border-radius: 6px; font-size: 13px;">
+            <strong>Pain Relievers & Gains:</strong> AI จัดลุคเสร็จใน 5 วินาที, ระบบเตือนกันใส่ซ้ำ 7 วัน, ได้ Personal Color ที่ขับผิว, ค้นพบคุณค่าของเสื้อผ้าเดิม
+          </div>
         </div>
-
-        <div class="card card-accent-navy">
-          <div class="card-title">🏷️ โฆษณาโปร่งใส แยกพื้นที่ชัดเจน</div>
-          <p class="card-desc" style="font-size: 18px; line-height: 1.7;">
-            • สินค้าสปอนเซอร์ทุกชิ้นจะติดป้ายกำกับ <strong>'โฆษณา'</strong> ชัดเจน<br>
-            • มีระบบอธิบายเหตุผลความเกี่ยวข้อง (Relevance Transparency)<br>
-            • ผู้ใช้สามารถตั้งค่าความเป็นส่วนตัว เลือกว่าจะแชร์สัญญาณรสนิยมเพื่อปรับแต่งแอดหรือไม่
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 07 / 14</span>
-    </div>
-  </section>
-
-  <!-- SLIDE 8: 5-DIMENSIONAL STYLING ENGINE -->
-  <section class="slide">
-    <div class="slide-header">
-      <div class="slide-eyebrow">AI Technology</div>
-      <h2 class="slide-title">Multi-Dimensional Context Engine (สไตลิสต์ 5 มิติ)</h2>
-      <p class="slide-subtitle">การประมวลผลคำแนะนำแฟชั่นที่ไม่ใช่แค่สุ่ม แต่คำนึงถึงบริบทจริงรอบตัว</p>
-    </div>
-
-    <div class="slide-content">
-      <div class="grid-4" style="margin-bottom: 24px;">
-        <div class="card card-accent-olive">
-          <div style="font-size: 32px; margin-bottom: 8px;">📅</div>
-          <h4 style="font-size: 18px; margin-bottom: 6px;">1. Weekly Routine</h4>
-          <p style="font-size: 14px; color: #64748b;">จดจำกิจวัตร 7 วัน (จันทร์เรียน, เสาร์คาเฟ่)</p>
-        </div>
-        <div class="card card-accent-navy">
-          <div style="font-size: 32px; margin-bottom: 8px;">☀️</div>
-          <h4 style="font-size: 18px; margin-bottom: 6px;">2. Thai Weather</h4>
-          <p style="font-size: 14px; color: #64748b;">คำนวณเนื้อผ้าตามความร้อนชื้น ฝนตก หรือห้องแอร์</p>
-        </div>
-        <div class="card card-accent-amber">
-          <div style="font-size: 32px; margin-bottom: 8px;">👔</div>
-          <h4 style="font-size: 18px; margin-bottom: 6px;">3. Occasion & Mood</h4>
-          <p style="font-size: 14px; color: #64748b;">3 ทิศทาง: Safe (เพลย์เซฟ), Elevated (เนี้ยบ), Casual</p>
-        </div>
-        <div class="card card-accent-rose">
-          <div style="font-size: 32px; margin-bottom: 8px;">🎨</div>
-          <h4 style="font-size: 18px; margin-bottom: 6px;">4. Personal Color</h4>
-          <p style="font-size: 14px; color: #64748b;">เลือกพาเลทสี Warm / Cool ที่ขับผิวหน้าให้ผ่องใส</p>
-        </div>
-      </div>
-
-      <div class="card card-accent-olive" style="padding: 18px 24px;">
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <div style="font-size: 36px;">🔄</div>
-          <div>
-            <h4 style="font-size: 18px; color: #0f172a;">มิติที่ 5: Smart Repeat Avoidance (ป้องกันการใส่ชุดซ้ำ)</h4>
-            <p style="font-size: 15px; color: #64748b; margin-top: 4px;">ระบบ Wear Logs จะดึงประวัติการใส่เสื้อผ้า เพื่อสลับหมุนเวียนชิ้นในตู้ ไม่ให้ชุดเดิมโผล่มาซ้ำในรอบสัปดาห์</p>
+        <!-- Merchant Side -->
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <h3 style="font-size: 20px; font-weight: 700; color: #065f46; margin-bottom: 12px;">ฝั่งร้านค้าแฟชั่น (Merchant Value Fit)</h3>
+          <div style="font-size: 14px; margin-bottom: 8px;"><strong>Merchant Jobs:</strong> สร้างยอดขาย เข้าถึงกลุ่มเป้าหมายที่มีกำลังซื้อ สร้างการจดจำแบรนด์</div>
+          <div style="background: #fee2e2; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 13px;">
+            <strong>Pains:</strong> ค่าโฆษณาพุ่งสูง, คนไม่สนใจแอด, วัดผลไม่ได้, ไม่รู้ความต้องการจริงของลูกค้า
+          </div>
+          <div style="background: #dcfce7; padding: 10px; border-radius: 6px; font-size: 13px;">
+            <strong>Pain Relievers & Gains:</strong> เข้าถึงลูกค้าผ่าน Missing Item Matching, Conversion สูงกว่าแอดทั่วไป 4.5 เท่า, Dashboard สถิติ Real-time
           </div>
         </div>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 08 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 7/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 9: FEATURE MATRIX - ROLE 1: CUSTOMER -->
+  <!-- SLIDE 8: BUSINESS MODEL CANVAS (9 BLOCKS) -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Feature Architecture</div>
-      <h2 class="slide-title">ฟีเจอร์สำหรับ Role: ลูกค้าผู้ใช้งาน (Customer & Pro)</h2>
-      <p class="slide-subtitle">ศูนย์รวมเครื่องมือจัดการตู้เสื้อผ้าและสไตล์ส่วนบุคคลแบบครบวงจร</p>
+      <div>
+        <p class="slide-eyebrow">Business Architecture</p>
+        <h2 class="slide-title">Business Model Canvas (BMC): โมเดลธุรกิจ 9 ช่องสมบูรณ์</h2>
+      </div>
+      <span class="slide-tag">Business Model</span>
     </div>
+    <div class="slide-content">
+      <div class="bmc-grid">
+        <div class="bmc-cell">
+          <div class="bmc-title">1. Key Partners</div>
+          <div class="bmc-text">
+            • แบรนด์เสื้อผ้าไทย & SME<br>
+            • สถาบัน Personal Color<br>
+            • E-commerce (Shopee/TikTok)<br>
+            • ผู้ให้บริการคลาวด์/Payment
+          </div>
+        </div>
+        <div class="bmc-cell">
+          <div class="bmc-title">2. Key Activities</div>
+          <div class="bmc-text">
+            • พัฒนา Vision AI & Knowledge Graph<br>
+            • ตรวจสอบร้านค้า (Moderation)<br>
+            • การตลาดดิจิทัล & Community<br>
+            • การดูแลข้อมูลส่วนบุคคล
+          </div>
+        </div>
+        <div class="bmc-cell" style="grid-row: span 2; background: #f0fdf4;">
+          <div class="bmc-title" style="color: #166534;">3. Value Propositions</div>
+          <div class="bmc-text">
+            <strong>สำหรับผู้ใช้:</strong><br>
+            • ประหยัดเวลา 20 นาที/วัน<br>
+            • แต่งตัวมั่นใจ เข้ากับอากาศและสีผิว<br>
+            • ชุบชีวิตเสื้อผ้าเดิมในตู้ 100%<br>
+            • ปลอดภัย ไร้กังวลเรื่องข้อมูล<br><br>
+            <strong>สำหรับร้านค้า:</strong><br>
+            • Contextual High-Intent Leads<br>
+            • Conversion สูงกว่าแอดทั่วไป 4.5 เท่า<br>
+            • ช่องทางขายแบบไม่รบกวนลูกค้า
+          </div>
+        </div>
+        <div class="bmc-cell">
+          <div class="bmc-title">4. Customer Relationships</div>
+          <div class="bmc-text">
+            • Ethical AI & Transparency<br>
+            • Automated Self-service Studio<br>
+            • ซัพพอร์ตผ่าน LINE: @Yoursylist และโทร 0888888888
+          </div>
+        </div>
+        <div class="bmc-cell">
+          <div class="bmc-title">5. Customer Segments</div>
+          <div class="bmc-text">
+            • วัยทำงาน First Jobbers & Gen Z<br>
+            • ผู้รักสไตล์ Capsule Wardrobe<br>
+            • แบรนด์เสื้อผ้าแฟชั่นอิสระ & SME ที่ต้องการยอดขายคุณภาพ
+          </div>
+        </div>
+        <div class="bmc-cell">
+          <div class="bmc-title">6. Key Resources</div>
+          <div class="bmc-text">
+            • อัลกอริทึม AI สไตลิ่งเฉพาะตัว<br>
+            • ฐานข้อมูลตู้เสื้อผ้าดิจิทัล<br>
+            • ระบบคลาวด์ & สถาปัตยกรรม API<br>
+            • ทีมผู้เชี่ยวชาญแฟชั่นและวิศวกร
+          </div>
+        </div>
+        <div class="bmc-cell">
+          <div class="bmc-title">7. Channels</div>
+          <div class="bmc-text">
+            • Responsive Web App & PWA<br>
+            • โซเชียลมีเดีย (IG, TikTok, Lemon8)<br>
+            • เวิร์กช็อปองค์กรด้านภาพลักษณ์<br>
+            • พันธมิตรร้านค้าแฟชั่น
+          </div>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+        <div class="bmc-cell" style="background: #fef2f2;">
+          <div class="bmc-title" style="color: #991b1b;">8. Cost Structure (ต้นทุน)</div>
+          <div class="bmc-text">
+            ค่า AI API / GPU Server Hosting | ค่าพัฒนาซอฟต์แวร์ | ค่าการตลาด User Acquisition | ค่าตรวจสอบคอนเทนต์ร้านค้า
+          </div>
+        </div>
+        <div class="bmc-cell" style="background: #eff6ff;">
+          <div class="bmc-title" style="color: #1e40af;">9. Revenue Streams (รายได้)</div>
+          <div class="bmc-text">
+            Freemium Pro Subscription (29 บ./ด. เดือนแรก 9 บ.) | ค่าบริการร้านค้า & แคมเปญ (199 บ./ด.) | Affiliate Commission 8-15% | B2B Market Insights
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 8/17</span>
+    </div>
+  </section>
 
+  <!-- SLIDE 9: REVENUE & MONETIZATION STRATEGY -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <p class="slide-eyebrow">Financial Model</p>
+        <h2 class="slide-title">โครงสร้างรายได้และการสร้างผลกำไร (Monetization Engine)</h2>
+      </div>
+      <span class="slide-tag">Revenue Architecture</span>
+    </div>
     <div class="slide-content">
       <div class="grid-3">
-        <div class="card">
-          <h3 style="font-size: 20px; color: #1e3a8a; margin-bottom: 10px;">👗 ตู้เสื้อผ้าดิจิทัล</h3>
-          <ul class="card-list">
-            <li>อัปโหลดและสกัดสีอัตโนมัติ</li>
-            <li>คัดแยกหมวดหมู่และแท็กสไตล์</li>
-            <li>เช็คสถานะความพร้อมใส่</li>
+        <div class="card" style="border-top: 4px solid #3b82f6;">
+          <div class="card-title">💳 B2C: Pro Subscription</div>
+          <div class="stat-number" style="font-size: 32px; color: #2563eb;">29 ฿/เดือน</div>
+          <div style="color: #dc2626; font-size: 14px; font-weight: 700; margin-bottom: 8px;">โปรโมชั่นพิเศษ: เดือนแรก 9 บาท</div>
+          <ul class="clean-list" style="margin-top: 12px; font-size: 14px;">
+            <li><strong>Weekly Style Memory:</strong> จดจำสไตล์และกิจวัตรประจำวัน 7 วัน</li>
+            <li><strong>Weekly Outfit Planner:</strong> วางแผนลุคล่วงหน้าทั้งสัปดาห์ใน 1 คลิก</li>
+            <li><strong>Smart Repeat Avoidance:</strong> หลีกเลี่ยงการแนะนำชุดซ้ำในรอบสัปดาห์</li>
+            <li><strong>Advanced Insights:</strong> สรุปสถิติการใช้งานตู้เสื้อผ้าเชิงลึก</li>
+            <li><strong>Appearance Themes:</strong> ปรับแต่งธีมแอปพลิเคชัน (Light/Dark)</li>
           </ul>
         </div>
-
-        <div class="card">
-          <h3 style="font-size: 20px; color: #1e3a8a; margin-bottom: 10px;">🤖 AI Stylist 3 ทิศทาง</h3>
-          <ul class="card-list">
-            <li>Safe, Elevated, Comfortable</li>
-            <li>Missing Item Matching ชิ้นที่ขาด</li>
-            <li>คำแนะนำความสบายและสไตล์</li>
+        <div class="card" style="border-top: 4px solid #10b981;">
+          <div class="card-title">🛍️ B2B: Merchant Store</div>
+          <div class="stat-number" style="font-size: 32px; color: #059669;">199 ฿/เดือน</div>
+          <div style="color: #059669; font-size: 14px; font-weight: 700; margin-bottom: 8px;">เปิดร้านบน YourStylist</div>
+          <ul class="clean-list" style="margin-top: 12px; font-size: 14px;">
+            <li><strong>เปิดหน้าร้านดิจิทัล:</strong> ลงสินค้าในตู้เสื้อผ้าเสมือน</li>
+            <li><strong>Contextual Missing Item:</strong> ระบบจับคู่แนะนำเฉพาะตอนลูกค้าขาด</li>
+            <li><strong>High Conversion:</strong> ต้นทุนต่อผลลัพธ์ต่ำกว่ายิงแอดทั่วไป แต่ยอดซื้อสูงกว่า 4.5 เท่า</li>
+            <li><strong>Merchant Studio:</strong> แผงควบคุมสถิติ Impressions, Clicks, Likes Real-time</li>
           </ul>
         </div>
-
-        <div class="card">
-          <h3 style="font-size: 20px; color: #1e3a8a; margin-bottom: 10px;">🎨 Personal Color Quiz</h3>
-          <ul class="card-list">
-            <li>ควิซ 4 ข้อหา Undertone ผิว</li>
-            <li>แสดงพาเลท 8 สีขับผิว + สีควรเลี่ยง</li>
-            <li>เชื่อมต่อเข้ากับ AI Stylist ทันที</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3 style="font-size: 20px; color: #1e3a8a; margin-bottom: 10px;">📅 Weekly Planner</h3>
-          <ul class="card-list">
-            <li>จดจำกิจวัตร 7 วัน (Style Memory)</li>
-            <li>ปุ่มจัดชุดด้วย AI คลิกเดียวในแต่ละวัน</li>
-            <li>ดึงบริบทกิจกรรมมากรอกอัตโนมัติ</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3 style="font-size: 20px; color: #1e3a8a; margin-bottom: 10px;">🔄 Smart Wear Logs</h3>
-          <ul class="card-list">
-            <li>บันทึกประวัติการใส่ชุดประจำวัน</li>
-            <li>ระบบป้องกันการแนะนำชุดซ้ำ</li>
-            <li>สถิติตู้เสื้อผ้าและการใช้งาน</li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <h3 style="font-size: 20px; color: #1e3a8a; margin-bottom: 10px;">⚙️ Pro Appearance & Privacy</h3>
-          <ul class="card-list">
-            <li>เลือกธีม Light / Dark / System</li>
-            <li>เลือกสี Accent (Olive, Navy, Mono)</li>
-            <li>ระบบความปลอดภัยตามมาตรฐาน PDPA</li>
+        <div class="card" style="border-top: 4px solid #f59e0b;">
+          <div class="card-title">🤝 Affiliate & B2B Insights</div>
+          <div class="stat-number" style="font-size: 32px; color: #d97706;">8% - 15%</div>
+          <div style="color: #d97706; font-size: 14px; font-weight: 700; margin-bottom: 8px;">ส่วนแบ่งยอดขายสำเร็จ</div>
+          <ul class="clean-list" style="margin-top: 12px; font-size: 14px;">
+            <li><strong>Affiliate Commission:</strong> ส่วนแบ่งยอดขายเมื่อลูกค้าคลิกซื้อผ่าน Shopee/เว็บร้าน</li>
+            <li><strong>Trend Reports:</strong> จำหน่ายรายงานความต้องการและสินค้าที่ตลาดกำลังขาดแก่แบรนด์</li>
           </ul>
         </div>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 09 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 9/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 10: FEATURE MATRIX - ROLE 2: MERCHANT -->
+  <!-- SLIDE 10: OPERATIONAL FEASIBILITY & RESOURCES -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Feature Architecture</div>
-      <h2 class="slide-title">ฟีเจอร์สำหรับ Role: ร้านค้าพันธมิตร (Merchant Portal)</h2>
-      <p class="slide-subtitle">แพลตฟอร์มการตลาดแฟชั่นที่คุ้มค่า เข้าถึงลูกค้าที่มีความต้องการซื้อจริง</p>
+      <div>
+        <p class="slide-eyebrow">Operational Readiness</p>
+        <h2 class="slide-title">ความเป็นไปได้ในการดำเนินการ: ทรัพยากรและแผนงาน (Operations)</h2>
+      </div>
+      <span class="slide-tag">Feasibility</span>
     </div>
-
     <div class="slide-content">
       <div class="grid-2">
-        <div class="card card-accent-amber">
-          <h3 style="font-size: 24px; color: #0f172a; margin-bottom: 12px;">🏪 หน้าร้านและแบรนดิ้ง (Shop Profile & Branding)</h3>
-          <ul class="card-list" style="font-size: 17px;">
-            <li><strong>จัดการข้อมูลร้านค้า:</strong> กำหนดชื่อร้าน, คำอธิบาย, ลิงก์เว็บไซต์ และช่องทาง Instagram</li>
-            <li><strong>ระบบอัปโหลดรูปภาพ:</strong> รองรับ Logo ร้านค้า (1:1) และ Cover Banner แนวนอน พร้อม Live Preview</li>
-            <li><strong>หน้าร้านค้าสาธารณะ (/shops/[slug]):</strong> แสดงสินค้าจัดเรียงสวยงาม แถวละ 4 รายการ พร้อมระบบแบ่งหน้า (Pagination 20 รายการ/หน้า) ไม่ทับรูปหน้าปก</li>
+        <div class="card">
+          <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 14px;">🛠️ ทรัพยากรหลักและเทคโนโลยี (Key Tech Stack)</h3>
+          <ul class="clean-list">
+            <li><strong>Frontend & Web Architecture:</strong> Next.js 15, Tailwind CSS, TypeScript รองรับ Responsive มือถือและคอมพิวเตอร์</li>
+            <li><strong>Database & Auth:</strong> Supabase PostgreSQL พร้อม Row Level Security (RLS) ปกป้องข้อมูลส่วนตัวระดับฐานข้อมูล</li>
+            <li><strong>AI Models:</strong> Multi-modal Vision API สำหรับวิเคราะห์เสื้อผ้า และ LLM Fine-tuned สำหรับ Fashion Logic</li>
+            <li><strong>Infrastructure:</strong> Serverless Edge Deployment บน Vercel มั่นใจได้เรื่องความเร็วและความเสถียร 99.9%</li>
           </ul>
         </div>
-
-        <div class="card card-accent-amber">
-          <h3 style="font-size: 24px; color: #0f172a; margin-bottom: 12px;">📈 แคมเปญโฆษณาและการวิเคราะห์ (Campaign & Analytics)</h3>
-          <ul class="card-list" style="font-size: 17px;">
-            <li><strong>สร้างแคมเปญโฆษณา:</strong> อัปโหลดภาพสินค้า ระบุราคา แท็กหมวดหมู่ และกาลเทศะ</li>
-            <li><strong>บริหารงบประมาณและ CPC:</strong> ควบคุมงบโฆษณา จ่ายตามยอดคลิกจริง (Pay-per-Click)</li>
-            <li><strong>แดชบอร์ดสถิติเรียลไทม์:</strong> ติดตามยอดการมองเห็น (Impressions ผ่าน Beacon), ยอดคลิกจริง (Verified Clicks), อัตรา CTR, และยอดกดถูกใจ</li>
+        <div class="card">
+          <h3 style="font-size: 20px; font-weight: 700; color: #0f172a; margin-bottom: 14px;">📅 แผนงานเปิดตัวและขยายธุรกิจ (Roadmap)</h3>
+          <ul class="clean-list">
+            <li><strong>ไตรมาส 1:</strong> เปิดตัว Beta ในกลุ่ม First Jobbers 3,000 คน และดึงร้านค้าพาร์ตเนอร์รุ่นแรก 20 แบรนด์</li>
+            <li><strong>ไตรมาส 2:</strong> เปิดตัวระบบ Personal Color Studio และระบบ Missing Item Matching เต็มรูปแบบ</li>
+            <li><strong>ไตรมาส 3:</strong> ขยายสู่ฟีเจอร์ Capsule Wardrobe Simulator และขยายร้านค้าพันธมิตรสู่ 100 แบรนด์</li>
+            <li><strong>ไตรมาส 4:</strong> เริ่มสร้างผลกำไรสุทธิ และขยายฐานผู้ใช้งานสู่ 50,000 คน</li>
           </ul>
         </div>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 10 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 10/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 11: FEATURE MATRIX - ROLE 3: ADMIN -->
+  <!-- SLIDE 11: 3-YEAR FINANCIAL PROJECTIONS -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Feature Architecture</div>
-      <h2 class="slide-title">ฟีเจอร์สำหรับ Role: ผู้ดูแลระบบ (Admin Governance)</h2>
-      <p class="slide-subtitle">ศูนย์ควบคุมมาตรฐาน ความปลอดภัย และความโปร่งใสของแพลตฟอร์ม</p>
+      <div>
+        <p class="slide-eyebrow">Financial Projections</p>
+        <h2 class="slide-title">ประมาณการทางการเงิน 3 ปี (3-Year Financial Projections)</h2>
+      </div>
+      <span class="slide-tag">Unit Economics</span>
     </div>
+    <div class="slide-content">
+      <div class="grid-3" style="margin-bottom: 24px;">
+        <div class="card" style="text-align: center; border-top: 4px solid #64748b;">
+          <div class="stat-label">ปีที่ 1 (Establish & Scale)</div>
+          <div class="stat-number" style="font-size: 38px; color: #0f172a; margin: 12px 0;">3.8 ล้านบาท</div>
+          <p style="font-size: 14px; color: #475569;">ผู้ใช้ Pro 5,000 คน · ร้านค้า 150 ร้าน<br><strong>จุดคุ้มทุนเดือนที่ 10</strong></p>
+        </div>
+        <div class="card" style="text-align: center; border-top: 4px solid #3b82f6;">
+          <div class="stat-label">ปีที่ 2 (Rapid Expansion)</div>
+          <div class="stat-number" style="font-size: 38px; color: #2563eb; margin: 12px 0;">14.2 ล้านบาท</div>
+          <p style="font-size: 14px; color: #475569;">ผู้ใช้ Pro 25,000 คน · ร้านค้า 500 ร้าน<br>กำไรสุทธิ 32%</p>
+        </div>
+        <div class="card" style="text-align: center; border-top: 4px solid #10b981;">
+          <div class="stat-label">ปีที่ 3 (Market Leader)</div>
+          <div class="stat-number" style="font-size: 38px; color: #059669; margin: 12px 0;">38.5 ล้านบาท</div>
+          <p style="font-size: 14px; color: #475569;">ผู้ใช้ Pro 70,000 คน · ร้านค้า 1,200 ร้าน<br>กำไรสุทธิ 38%</p>
+        </div>
+      </div>
+      <div class="card" style="background: #f8fafc;">
+        <div style="display: flex; justify-content: space-around; text-align: center; font-size: 15px;">
+          <div><strong>CAC (ต้นทุนดึงดูดลูกค้า):</strong> 35 บาท/คน</div>
+          <div><strong>LTV (มูลค่าตลอดชีพลูกค้า):</strong> 350 บาท/คน</div>
+          <div><strong>LTV / CAC Ratio:</strong> 10x (โครงสร้างต้นทุนและกำไรแข็งแกร่ง)</div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 11/17</span>
+    </div>
+  </section>
 
+  <!-- SLIDE 12: TARGET AUDIENCE & PERSONA -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <p class="slide-eyebrow">Target Market</p>
+        <h2 class="slide-title">คุณค่าที่มอบให้ลูกค้าและความเหมาะสมกับกลุ่มเป้าหมาย (Personas)</h2>
+      </div>
+      <span class="slide-tag">Customer Personas</span>
+    </div>
+    <div class="slide-content">
+      <div class="grid-2">
+        <div class="card" style="border-left: 6px solid #8b5cf6;">
+          <h3 style="font-size: 20px; font-weight: 700; color: #6d28d9; margin-bottom: 8px;">Persona 1: นภัส (First Jobber วัย 25 ปี)</h3>
+          <p style="font-size: 14px; color: #64748b; margin-bottom: 12px;">ตำแหน่ง: Marketing Executive · งบแต่งตัวปานกลาง</p>
+          <ul class="clean-list" style="font-size: 14px;">
+            <li><strong>เป้าหมาย:</strong> แต่งตัวดูภูมิฐานแต่ไม่แก่ กลัวเพื่อนร่วมงานทักว่าใส่ชุดซ้ำ</li>
+            <li><strong>คุณค่าที่ YourStylist มอบให้:</strong> AI ช่วยจับคู่สูทกับกางเกงสแล็คที่มีอยู่แล้ว วางตารางชุดล่วงหน้า 7 วัน ทำให้ตื่นนอนอย่างสบายใจ มั่นใจทุกวัน</li>
+          </ul>
+        </div>
+        <div class="card" style="border-left: 6px solid #f59e0b;">
+          <h3 style="font-size: 20px; font-weight: 700; color: #b45309; margin-bottom: 8px;">Persona 2: คุณพิม (เจ้าของแบรนด์ Linen Studio)</h3>
+          <p style="font-size: 14px; color: #64748b; margin-bottom: 12px;">ธุรกิจ: ร้านเสื้อผ้าแฟชั่นสไตล์มินิมอลบน Instagram</p>
+          <ul class="clean-list" style="font-size: 14px;">
+            <li><strong>เป้าหมาย:</strong> หาลูกค้าใหม่ที่เข้าใจคุณภาพสินค้า ไม่ชอบลดราคาตัดราคา</li>
+            <li><strong>คุณค่าที่ YourStylist มอบให้:</strong> สินค้าของร้านถูกแนะนำในจังหวะที่ลูกค้ากำลังมองหาไอเทมไปแมตช์จริง ได้ยอดขายคุณภาพโดยไม่ต้องแข่งยิงแอดกวาด</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 12/17</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 13: ROLE 1 - CUSTOMER FEATURES -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <p class="slide-eyebrow">Feature Architecture</p>
+        <h2 class="slide-title">ฟีเจอร์ทั้งหมด: บทบาทที่ 1 - ลูกค้า (Customer Role)</h2>
+      </div>
+      <span class="slide-tag">Customer Features</span>
+    </div>
     <div class="slide-content">
       <div class="grid-3">
-        <div class="card card-accent-navy">
-          <h3 style="font-size: 22px; color: #1e3a8a; margin-bottom: 10px;">🛡️ Shop Approval</h3>
-          <p class="card-desc">ตรวจสอบและอนุมัติร้านค้าใหม่ คัดกรองตัวตนและมาตรฐานสินค้า ป้องกันมิจฉาชีพและสินค้าละเมิดลิขสิทธิ์</p>
+        <div class="card">
+          <div class="card-title">🧥 Digital Wardrobe</div>
+          <p class="card-body">คลังตู้เสื้อผ้าส่วนตัว ถ่ายรูป แยกประเภทตามสี/เนื้อผ้า/หมวดหมู่ และติดตามสถานะความพร้อม (พร้อมใส่/ส่งซัก)</p>
         </div>
-
-        <div class="card card-accent-navy">
-          <h3 style="font-size: 22px; color: #1e3a8a; margin-bottom: 10px;">⚖️ Ad Moderation</h3>
-          <p class="card-desc">ตรวจสอบโฆษณาทุกชิ้นก่อนเผยแพร่ ควบคุมไม่ให้มีเนื้อหาผิดกฎหมาย หรือการใช้คำวิจารณ์รูปร่าง (Anti-Body Shaming)</p>
+        <div class="card">
+          <div class="card-title">✨ AI Stylist 3 Directions</div>
+          <p class="card-body">อัลกอริทึมจัดชุด 3 ทิศทางสไตล์ วิเคราะห์ตามกิจกรรม อากาศจริง และระดับความเป็นทางการ</p>
         </div>
-
-        <div class="card card-accent-navy">
-          <h3 style="font-size: 22px; color: #1e3a8a; margin-bottom: 10px;">📜 Audit Logs</h3>
-          <p class="card-desc">บันทึกประวัติการตัดสินใจและการเข้าถึงระบบ (Immutable Logs) เพื่อการตรวจสอบย้อนหลังและการกำกับดูแลที่โปร่งใส 100%</p>
+        <div class="card">
+          <div class="card-title">📅 7-Day Routine Planner</div>
+          <p class="card-body">จัดตารางชุดล่วงหน้า 7 วัน พร้อมระบบ Repeat Prevention แจ้งเตือนอัตโนมัติป้องกันการใส่ซ้ำ</p>
         </div>
-      </div>
-
-      <div style="margin-top: 24px; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; font-size: 16px; color: #334155;">
-        <strong>Role-Based Access Control (RBAC):</strong> แยกสิทธิ์ระหว่าง Customer, Merchant และ Admin อย่างเข้มงวดด้วย Supabase Row Level Security (RLS) ปกป้องข้อมูลส่วนบุคคลตามมาตรฐานความปลอดภัยสูงสุด
+        <div class="card">
+          <div class="card-title">🎨 Personal Color Studio</div>
+          <p class="card-body">แบบทดสอบวิเคราะห์ Undertone ผิว และเลือกพาเลทสีที่ช่วยขับผิวให้ดูสดใสและมั่นใจ</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🧩 Missing Item Matches</div>
+          <p class="card-body">ระบบแนะนำชิ้นที่ขาดเพื่อเติมเต็มลุค เชื่อมโยงไปยังร้านค้าพันธมิตรคุณภาพสูง</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📝 Wear Log & Feedback</div>
+          <p class="card-body">บันทึกประวัติการใส่ชุด คะแนนความสบาย และส่งความเห็นเพื่อสอน AI ให้เข้าใจสไตล์เฉพาะตัว</p>
+        </div>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 11 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 13/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 12: BUSINESS MODEL CANVAS -->
+  <!-- SLIDE 14: ROLE 2 - MERCHANT FEATURES -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Business Viability</div>
-      <h2 class="slide-title">แบบจำลองธุรกิจและแหล่งรายได้ (Business Model Canvas)</h2>
-      <p class="slide-subtitle">โมเดลรายได้แบบ Multi-Sided Platform ที่เติบโตอย่างสมดุลและยั่งยืน</p>
+      <div>
+        <p class="slide-eyebrow">Feature Architecture</p>
+        <h2 class="slide-title">ฟีเจอร์ทั้งหมด: บทบาทที่ 2 - ร้านค้าแฟชั่น (Merchant Role)</h2>
+      </div>
+      <span class="slide-tag">Merchant Features</span>
     </div>
-
     <div class="slide-content">
-      <div class="grid-2" style="margin-bottom: 24px;">
-        <div class="card card-accent-olive">
-          <h3 style="font-size: 24px; color: #0f172a; margin-bottom: 10px;">1. B2C: Pro Subscription (รายได้จากผู้ใช้)</h3>
-          <ul class="card-list" style="font-size: 17px;">
-            <li><strong>แพ็กเกจสมาชิกรายเดือน/รายปี:</strong> ราคาเข้าถึงง่าย (เช่น 129 - 199 บาท/เดือน)</li>
-            <li><strong>ฟีเจอร์พรีเมียม:</strong> ไม่จำกัดจำนวนเสื้อผ้าในตู้, Smart Repeat Avoidance แบบเต็มรูปแบบ, ระบบวิเคราะห์ Personal Color เชิงลึก, และการปรับแต่งธีม</li>
-          </ul>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">📊 Merchant Studio Dashboard</div>
+          <p class="card-body">แผงควบคุมสถิติวิเคราะห์ภาพรวม Impressions, Clicks, Likes, CTR และยอดการสั่งซื้อแบบ Real-time</p>
         </div>
-
-        <div class="card card-accent-navy">
-          <h3 style="font-size: 24px; color: #0f172a; margin-bottom: 10px;">2. B2B: Performance CPC (รายได้จากร้านค้า)</h3>
-          <ul class="card-list" style="font-size: 17px;">
-            <li><strong>Pay-per-Click (CPC):</strong> คิดค่าบริการเฉพาะเมื่อมีลูกค้าคลิกดูสินค้าที่นำเสนอผ่าน Missing Item Matching</li>
-            <li><strong>อัตราความคุ้มค่าสูง (High ROI):</strong> ร้านค้ายินดีจ่าย เพราะได้ลูกค้าที่มีความต้องการสินค้าชิ้นนั้นจริงในจังหวะที่พร้อมซื้อ</li>
-          </ul>
+        <div class="card">
+          <div class="card-title">📢 Campaign & Ad Creator</div>
+          <p class="card-body">เครื่องมือสร้างแคมเปญ อัปโหลดภาพสินค้าคุณภาพสูง กำหนดแท็กสไตล์ เนื้อผ้า และกลุ่มเป้าหมาย</p>
         </div>
-      </div>
-
-      <div class="card" style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 18px 24px;">
-        <p style="font-size: 17px; color: #166534;">
-          <strong>🌱 การสนับสนุนเป้าหมายความยั่งยืน (SDG 12: Circular Fashion):</strong> เพิ่มอัตรา Cost-per-Wear ช่วยลดปัญหา Fast Fashion Waste จากการซื้อเสื้อผ้ามาทิ้งขว้าง ส่งเสริมพฤติกรรมการบริโภคที่รับผิดชอบต่อโลก
-        </p>
+        <div class="card">
+          <div class="card-title">🎯 Missing Item Setup</div>
+          <p class="card-body">กำหนดเงื่อนไขการนำเสนอสินค้าเป็น Missing Item ในผลการจัดลุคของลูกค้าตามหลักสไตลิ่ง</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🏬 Shop Profile & Branding</div>
+          <p class="card-body">จัดการโปรไฟล์ร้านค้า เว็บไซต์ ลิงก์ Shopee / Instagram / LINE เพื่อให้ลูกค้ากดซื้อได้ทันที</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📑 Moderation Status Tracker</div>
+          <p class="card-body">ระบบติดตามสถานะการตรวจสอบความถูกต้องของแคมเปญจากแอดมินก่อนเผยแพร่</p>
+        </div>
+        <div class="card">
+          <div class="card-title">💬 Dedicated Support</div>
+          <p class="card-body">ช่องทางติดต่อเจ้าหน้าที่โดยตรงผ่าน LINE: @Yoursylist และเบอร์โทรศัพท์ 0888888888</p>
+        </div>
       </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 12 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 14/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 13: COMPETITIVE ADVANTAGE -->
+  <!-- SLIDE 15: ROLE 3 - ADMIN FEATURES -->
   <section class="slide">
     <div class="slide-header">
-      <div class="slide-eyebrow">Strategic Evaluation</div>
-      <h2 class="slide-title">ข้อได้เปรียบในการแข่งขัน (Competitive Advantages)</h2>
-      <p class="slide-subtitle">เปรียบเทียบ YourStylist กับแนวทางเดิมในตลาดแฟชั่น</p>
+      <div>
+        <p class="slide-eyebrow">Feature Architecture</p>
+        <h2 class="slide-title">ฟีเจอร์ทั้งหมด: บทบาทที่ 3 - ผู้ดูแลระบบ (Admin Role)</h2>
+      </div>
+      <span class="slide-tag">Admin Features</span>
     </div>
-
     <div class="slide-content">
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>มิติการประเมิน</th>
-            <th>แอปแฟชั่น / Fast Fashion ทั่วไป</th>
-            <th>โซเชียลมีเดีย (IG / TikTok)</th>
-            <th style="background: #526042;">YourStylist (นวัตกรรมของเรา)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>จุดประสงค์หลัก</strong></td>
-            <td>กระตุ้นให้ซื้อเสื้อผ้าใหม่ตลอดเวลา</td>
-            <td>เสพเนื้อหา / ขายของแบบยัดเยียด</td>
-            <td><strong>ใช้ของเดิมในตู้ให้คุ้มค่า + เติมเฉพาะสิ่งที่ขาด</strong></td>
-          </tr>
-          <tr>
-            <td><strong>การเลือกชุด</strong></td>
-            <td>ไม่มีระบบรู้ตู้เสื้อผ้าจริงของผู้ใช้</td>
-            <td>ผู้ใช้ต้องค้นหาและสไตล์เอง</td>
-            <td><strong>AI จัดจากตู้จริง 3 ลุคตรงบริบทชีวิตใน 1 คลิก</strong></td>
-          </tr>
-          <tr>
-            <td><strong>ความโปร่งใส</strong></td>
-            <td>รับสปอนเซอร์แอบแฝง ดันยอดขาย</td>
-            <td>แอดโฆษณาแทรกกวนใจ</td>
-            <td><strong>แยก AI ออกจากแอด 100% โปร่งใส ตรวจสอบได้</strong></td>
-          </tr>
-          <tr>
-            <td><strong>การจับคู่ร้านค้า</strong></td>
-            <td>เน้นแบรนด์ใหญ่ที่มีงบยิงแอดสูง</td>
-            <td>ประมูลแข่งขันค่าคลิกที่แพงขึ้นเรื่อยๆ</td>
-            <td><strong>Missing Item Matching จับคู่ตามชิ้นที่ขาดจริง</strong></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">🛡️ Admin Console Overview</div>
+          <p class="card-body">ศูนย์รวมสถิติภาพรวมระบบ จำนวนผู้ใช้งาน ตู้เสื้อผ้า แคมเปญโฆษณา และประสิทธิภาพเซิร์ฟเวอร์</p>
+        </div>
+        <div class="card">
+          <div class="card-title">✅ Shop Verification</div>
+          <p class="card-body">ระบบตรวจสอบความน่าเชื่อถือ เอกสาร และมาตรฐานของร้านค้าก่อนอนุมัติให้เปิดพื้นที่โฆษณา</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🔍 Ad Moderation Dialog</div>
+          <p class="card-body">เครื่องมือพรีวิวรูปภาพความละเอียดสูง เพื่อตรวจสอบความปลอดภัยและมาตรฐานภาพก่อนเผยแพร่</p>
+        </div>
+        <div class="card">
+          <div class="card-title">👥 User Management</div>
+          <p class="card-body">ระบบจัดการสิทธิ์ผู้ใช้ ควบคุมความปลอดภัย และตรวจสอบสถานะบัญชีในระบบ</p>
+        </div>
+        <div class="card">
+          <div class="card-title">🗑️ PDPA Multi-Stage Deletion</div>
+          <p class="card-body">ระบบประมวลผลคำขอลบบัญชีและทำลายข้อมูลส่วนบุคคลตามกฎหมาย PDPA อย่างโปร่งใส</p>
+        </div>
+        <div class="card">
+          <div class="card-title">📜 Audit Trail & Security Logs</div>
+          <p class="card-body">บันทึกประวัติการทำรายการสำคัญในระบบเพื่อการตรวจสอบย้อนหลังและความโปร่งใสสูงสุด</p>
+        </div>
+      </div>
     </div>
-
     <div class="slide-footer">
-      <span>YourStylist Business Innovation Project</span>
-      <span>Slide 13 / 14</span>
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 15/17</span>
     </div>
   </section>
 
-  <!-- SLIDE 14: CONCLUSION & Q&A -->
+  <!-- SLIDE 16: RISK ASSESSMENT & MITIGATION -->
+  <section class="slide">
+    <div class="slide-header">
+      <div>
+        <p class="slide-eyebrow">Risk Governance</p>
+        <h2 class="slide-title">การบริหารความเสี่ยงและแผนรับมือ (Risk Management Matrix)</h2>
+      </div>
+      <span class="slide-tag">Risk Assessment</span>
+    </div>
+    <div class="slide-content">
+      <div class="grid-2">
+        <div class="card" style="border-left: 6px solid #ef4444;">
+          <h3 style="font-size: 18px; font-weight: 700; color: #b91c1c; margin-bottom: 8px;">1. ความเสี่ยงด้านข้อมูลส่วนบุคคล (PDPA Risk)</h3>
+          <p style="font-size: 14px; color: #475569;"><strong>ความเสี่ยง:</strong> ผู้ใช้กังวลเรื่องการรั่วไหลของรูปเสื้อผ้าและสัดส่วน</p>
+          <p style="font-size: 14px; color: #166534; margin-top: 6px;"><strong>แผนรับมือ:</strong> ใช้ระบบ Zero-Knowledge Privacy ข้อมูลสัดส่วนและรูปถ่ายจะไม่ถูกส่งไปให้ร้านค้าหรือบุคคลที่สาม และมีปุ่มลบข้อมูลถาวรในคลิกเดียว</p>
+        </div>
+        <div class="card" style="border-left: 6px solid #f59e0b;">
+          <h3 style="font-size: 18px; font-weight: 700; color: #b45309; margin-bottom: 8px;">2. ความเสี่ยงด้าน AI แนะนำชุดไม่ถูกใจ (Hallucination)</h3>
+          <p style="font-size: 14px; color: #475569;"><strong>ความเสี่ยง:</strong> AI จับคู่สีหรือเนื้อผ้าไม่เข้ากันตามความรู้สึกจริง</p>
+          <p style="font-size: 14px; color: #166534; margin-top: 6px;"><strong>แผนรับมือ:</strong> ออกแบบให้เป็น 3 ทิศทางสไตล์ และใช้ระบบ Wear Feedback ให้ผู้ใช้กด Like/Dislike เพื่อเทรนให้ AI เรียนรู้สไตล์เฉพาะตัว</p>
+        </div>
+        <div class="card" style="border-left: 6px solid #3b82f6;">
+          <h3 style="font-size: 18px; font-weight: 700; color: #1d4ed8; margin-bottom: 8px;">3. ความเสี่ยงด้านร้านค้าไม่ยอมลงโฆษณา (Merchant Churn)</h3>
+          <p style="font-size: 14px; color: #475569;"><strong>ความเสี่ยง:</strong> ร้านค้าคุ้นชินกับการยิงแอดบนแพลตฟอร์มเดิม</p>
+          <p style="font-size: 14px; color: #166534; margin-top: 6px;"><strong>แผนรับมือ:</strong> กำหนดค่าบริการเริ่มต้นเพียง 199 บาท/เดือน เข้าถึงง่าย พร้อมสถิติ CTR ที่สูงกว่าปกติ 4.5 เท่า และทีมซัพพอร์ต LINE: @Yoursylist</p>
+        </div>
+        <div class="card" style="border-left: 6px solid #10b981;">
+          <h3 style="font-size: 18px; font-weight: 700; color: #047857; margin-bottom: 8px;">4. ความเสี่ยงด้านต้นทุน API สูงเมื่อผู้ใช้เติบโต (Cost Spike)</h3>
+          <p style="font-size: 14px; color: #475569;"><strong>ความเสี่ยง:</strong> ค่าบริการ Vision และ LLM API พุ่งสูง</p>
+          <p style="font-size: 14px; color: #166534; margin-top: 6px;"><strong>แผนรับมือ:</strong> ใช้ระบบ Intelligent Caching และ Local Image Preprocessing เพื่อลดการเรียก API ซ้ำซ้อนลงกว่า 65%</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>YourStylist — Innovation Venture Pitch</span>
+      <span>หน้า 16/17</span>
+    </div>
+  </section>
+
+  <!-- SLIDE 17: CONCLUSION & CONTACT -->
   <section class="slide slide-cover" style="text-align: center; align-items: center;">
-    <div style="max-width: 10in;">
-      <div style="font-size: 64px; margin-bottom: 24px;">✨</div>
-      <h2 style="font-size: 56px; font-weight: 800; margin-bottom: 20px; line-height: 1.2;">
-        YourStylist
+    <div style="max-width: 900px;">
+      <span class="badge badge-primary" style="margin-bottom: 20px;">สรุปวิสัยทัศน์โครงการ</span>
+      <h2 style="font-size: 54px; font-weight: 800; line-height: 1.2; margin-bottom: 24px;">
+        "เปลี่ยนตู้เสื้อผ้าเดิม ให้กลายเป็นแรงบันดาลใจใหม่ในทุกๆ วัน"
       </h2>
-      <p style="font-size: 28px; color: #cbd5e1; margin-bottom: 36px; line-height: 1.5;">
-        "เปลี่ยนตู้เสื้อผ้าเดิมให้มีชีวิต แต่งตัวด้วยความมั่นใจทุกวัน<br>
-        ด้วยนวัตกรรมปัญญาประดิษฐ์และระบบนิเวศแฟชั่นที่โปร่งใส"
+      <p style="font-size: 22px; color: #94a3b8; line-height: 1.6; margin-bottom: 40px;">
+        YourStylist พร้อมแล้วที่จะก้าวสู่การเป็นผู้นำด้าน AI Wardrobe Intelligence<br>
+        ที่เติบโตอย่างยั่งยืน ทั้งในมิติธุรกิจ สังคม และความพึงพอใจของลูกค้า
       </p>
-      <div style="display: inline-block; padding: 14px 32px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; font-size: 20px; color: #93c5fd;">
-        ขอขอบคุณอาจารย์และคณะกรรมการทุกท่าน • พร้อมตอบคำถาม (Q&A)
+      <div style="background: rgba(255,255,255,0.08); padding: 24px 36px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); display: inline-block;">
+        <p style="font-size: 18px; font-weight: 600; color: #60a5fa; margin-bottom: 8px;">ช่องทางการติดต่อเจ้าหน้าที่ (Official Contact):</p>
+        <p style="font-size: 20px; color: #ffffff;">
+          LINE: <strong>@Yoursylist</strong> &nbsp;|&nbsp; โทรศัพท์: <strong>0888888888</strong>
+        </p>
+        <p style="font-size: 14px; color: #94a3b8; margin-top: 8px;">เว็บไซต์: yourstylist.vercel.app / localhost:3000</p>
       </div>
     </div>
   </section>

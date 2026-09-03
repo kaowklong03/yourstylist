@@ -12,6 +12,11 @@ export function SiteFooter() {
           <Link href="/ai-stylist">AI Stylist</Link>
           <Link href="/discover">ค้นหาโฆษณาแฟชั่น</Link>
           <Link href="/register/merchant">สมัครร้านค้า</Link>
+          <div className="pt-2 text-xs space-y-0.5">
+            <span className="block font-medium text-paper">ติดต่อเจ้าหน้าที่</span>
+            <span className="block text-muted-light">LINE : @Yoursylist</span>
+            <span className="block text-muted-light">เบอร์ 0888888888</span>
+          </div>
         </nav>
         <nav aria-label="ข้อมูลทางกฎหมาย">
           <Link href="/privacy">ความเป็นส่วนตัว</Link>

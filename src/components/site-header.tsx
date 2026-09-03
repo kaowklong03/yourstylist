@@ -144,6 +144,13 @@ export function SiteHeader({ user }: { user?: CurrentUser | null }) {
                         </Link>
                       </>
                     )}
+                    {(user.role === "customer" || user.role === "merchant") && (
+                      <div className="pt-2 text-xs text-muted space-y-0.5 border-t border-line mt-2">
+                        <span className="block font-medium text-charcoal">ติดต่อเจ้าหน้าที่</span>
+                        <span className="block">LINE : @Yoursylist</span>
+                        <span className="block">เบอร์ 0888888888</span>
+                      </div>
+                    )}
                     <form action="/api/auth/logout" method="post" className="pt-2">
                       <button type="submit" className="text-xs text-rose-700 hover:underline inline-flex items-center gap-1">
                         <LogOut className="w-3.5 h-3.5" />
