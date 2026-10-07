@@ -32,6 +32,22 @@ export default async function MerchantDashboardPage() {
         <StatCard label="ถูกใจ" value={(likes ?? 0).toLocaleString("th-TH")} />
         <StatCard label="คลิกไปยังร้านค้า" value={(clicks ?? 0).toLocaleString("th-TH")} hint={`CTR ลิงก์ปลายทาง ${formatCtr(clicks ?? 0, impressions ?? 0)}`} />
       </div>
+      <div className="p-5 bg-olive-pale/30 border border-olive/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-4">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-olive uppercase tracking-wider">
+            <span>📡 Market Demand Radar</span>
+          </div>
+          <h3 className="font-serif text-lg font-normal text-charcoal">
+            สัปดาห์นี้ลูกค้าในระบบกำลังขาด "เบลเซอร์ผ้าลินินสีเบจ" ถึง 1,240 คน!
+          </h3>
+          <p className="text-xs text-muted">
+            มีเสื้อผ้าในตู้รอจับคู่อยู่แล้ว พร้อมรับยอดขายทันทีโดยไม่ต้องเสี่ยงสต็อกจม
+          </p>
+        </div>
+        <Link href="/merchant/radar" className="button button-solid shrink-0 text-xs">
+          เปิดดูเรดาร์ความต้องการตลาด →
+        </Link>
+      </div>
       <div className="editorial-note">
         <h2>สถานะการเผยแพร่</h2>
         <p>{shop.status === "approved" && shop.subscription_status === "active" ? "ร้านพร้อมส่งโฆษณาให้ทีมตรวจแล้ว" : "คุณสร้างร่างได้ แต่ต้องรออนุมัติร้านและเปิด subscription ก่อนส่งตรวจ"}</p>

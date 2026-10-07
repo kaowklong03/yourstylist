@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const links = [
   ["/merchant", "ภาพรวม"],
+  ["/merchant/radar", "เรดาร์ความต้องการ (Demand Radar)"],
   ["/merchant/shop", "ร้านค้า"],
   ["/merchant/ads", "โฆษณา"],
   ["/merchant/analytics", "สถิติ"],
