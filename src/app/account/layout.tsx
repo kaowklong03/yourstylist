@@ -4,6 +4,7 @@ import { requireCustomerExperiencePage } from "@/lib/auth";
 const links = [
   { href: "/account", label: "ภาพรวม" },
   { href: "/account/wardrobe", label: "ตู้เสื้อผ้าของฉัน" },
+  { href: "/account/smart-scanner", label: "กล้องสแกนก่อนซื้อ (Smart-Buy)" },
   { href: "/account/profile", label: "โปรไฟล์และความชอบ" },
   { href: "/account/personal-color", label: "วิเคราะห์ Personal Color" },
   { href: "/account/style-memory", label: "กิจวัตรและสไตล์" },

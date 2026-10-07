@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { User, LogOut, ChevronDown, Shield, Store, Shirt } from "lucide-react";
+import { User, LogOut, ChevronDown, Shield, Store, Shirt, Camera } from "lucide-react";
 import type { CurrentUser } from "@/lib/auth";
 import { resolveAvatarUrl } from "@/lib/assets";
 
@@ -129,6 +129,15 @@ export function UserAccountMenu({ user }: { user: CurrentUser }) {
                 >
                   <Shirt className="w-4 h-4 text-muted" />
                   <span>ตู้เสื้อผ้าของฉัน</span>
+                </Link>
+                <Link
+                  href="/account/smart-scanner"
+                  onClick={() => setIsOpen(false)}
+                  role="menuitem"
+                  className="flex items-center gap-2 px-3 py-2.5 text-charcoal hover:bg-paper font-medium min-h-[44px] transition-colors"
+                >
+                  <Camera className="w-4 h-4 text-muted" />
+                  <span>สแกนก่อนซื้อ (Smart-Buy)</span>
                 </Link>
               </>
             )}
