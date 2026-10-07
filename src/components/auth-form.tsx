@@ -135,7 +135,17 @@ export function AuthForm({
       </div>
 
       <div>
-        <label htmlFor="auth-password" className="block text-sm font-medium mb-1">รหัสผ่าน</label>
+        <div className="flex items-center justify-between mb-1">
+          <label htmlFor="auth-password" className="block text-sm font-medium">รหัสผ่าน</label>
+          {mode === "login" && (
+            <Link
+              href="/forgot-password"
+              className="text-xs text-olive hover:underline font-medium"
+            >
+              ลืมรหัสผ่าน?
+            </Link>
+          )}
+        </div>
         <div className="relative">
           <Lock className="w-4 h-4 text-muted absolute left-3 top-3" />
           <input
