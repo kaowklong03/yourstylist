@@ -26,8 +26,9 @@ const fitChips: { fit: WardrobePreferredFit; label: string }[] = [
 
 export function AddItemForm() {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const cameraInputRef = useRef<HTMLInputElement | null>(null);
+  const desktopFileInputRef = useRef<HTMLInputElement | null>(null);
+  const mobileCameraInputRef = useRef<HTMLInputElement | null>(null);
+  const mobileGalleryInputRef = useRef<HTMLInputElement | null>(null);
 
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadedPath, setUploadedPath] = useState<string | null>(null);
@@ -36,6 +37,7 @@ export function AddItemForm() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [aiNotice, setAiNotice] = useState<string | null>(null);
@@ -53,28 +55,79 @@ export function AddItemForm() {
   const [aiDescription, setAiDescription] = useState("");
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const cleanupPreviewUrl = (url: string | null) => {
+    if (url && url.startsWith("blob:")) {
+      try {
+        URL.revokeObjectURL(url);
+      } catch {
+        // ignore revoke errors
+      }
+    }
+  };
 
+  const processSelectedFile = (rawFile: File) => {
     setErrorMsg(null);
     setAiNotice(null);
 
+    // Normalize mime type for mobile devices / cameras that report image/jpg or empty mime
+    let mimeType = rawFile.type.toLowerCase();
+    const fileName = rawFile.name.toLowerCase();
+
+    if (mimeType === "image/jpg" || (!mimeType && /\.(jpe?g)$/i.test(fileName))) {
+      mimeType = "image/jpeg";
+    } else if (!mimeType && /\.png$/i.test(fileName)) {
+      mimeType = "image/png";
+    } else if (!mimeType && /\.webp$/i.test(fileName)) {
+      mimeType = "image/webp";
+    }
+
     const allowed = new Set(["image/jpeg", "image/png", "image/webp"]);
-    if (!allowed.has(file.type)) {
+    if (!allowed.has(mimeType)) {
       setErrorMsg("กรุณาเลือกไฟล์ภาพประเภท JPEG, PNG หรือ WebP เท่านั้น");
       return;
     }
 
-    if (file.size > 5 * 1024 * 1024) {
+    if (rawFile.size > 5 * 1024 * 1024) {
       setErrorMsg("ขนาดไฟล์ต้องไม่เกิน 5 MB");
       return;
     }
 
+    // Wrap into normalized File if mime was corrected
+    const file = mimeType !== rawFile.type
+      ? new File([rawFile], rawFile.name, { type: mimeType })
+      : rawFile;
+
+    cleanupPreviewUrl(previewUrl);
     const objectUrl = URL.createObjectURL(file);
     setPreviewUrl(objectUrl);
 
     uploadAndAnalyze(file);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    processSelectedFile(file);
+    // Reset input value so re-shooting or picking the same file again triggers onChange
+    e.target.value = "";
+  };
+
+  const handleResetImage = () => {
+    cleanupPreviewUrl(previewUrl);
+    setPreviewUrl(null);
+    setUploadedPath(null);
+    if (desktopFileInputRef.current) desktopFileInputRef.current.value = "";
+    if (mobileCameraInputRef.current) mobileCameraInputRef.current.value = "";
+    if (mobileGalleryInputRef.current) mobileGalleryInputRef.current.value = "";
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processSelectedFile(file);
+    }
   };
 
   const uploadAndAnalyze = async (file: File) => {
@@ -273,58 +326,118 @@ export function AddItemForm() {
 
             <button
               type="button"
-              onClick={() => {
-                setPreviewUrl(null);
-                setUploadedPath(null);
-              }}
-              className="text-xs text-muted hover:text-danger underline"
+              onClick={handleResetImage}
+              className="text-xs text-muted hover:text-danger underline cursor-pointer"
             >
               ถ่ายหรือเลือกรูปภาพใหม่
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Primary Mobile Action: Camera */}
-            <button
-              type="button"
-              onClick={() => cameraInputRef.current?.click()}
-              className="p-8 border-2 border-dashed border-olive/40 bg-olive-pale/20 hover:border-charcoal hover:bg-paper transition-all text-center flex flex-col items-center justify-center space-y-3 cursor-pointer"
-            >
-              <Camera className="w-8 h-8 text-olive" />
-              <div>
-                <strong className="block text-sm text-charcoal">ถ่ายรูปด้วยกล้อง</strong>
-                <span className="text-xs text-muted">ถ่ายภาพเสื้อผ้าชิ้นใหม่ทันที</span>
+          <div className="space-y-4">
+            {/* 1. Desktop View (hidden on mobile, visible on md and up): Drag & Drop Dropzone */}
+            <div className="hidden md:block">
+              <div
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    desktopFileInputRef.current?.click();
+                  }
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(true);
+                }}
+                onDragLeave={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(false);
+                }}
+                onDrop={handleDrop}
+                onClick={() => desktopFileInputRef.current?.click()}
+                className={`p-12 border-2 border-dashed transition-all text-center flex flex-col items-center justify-center space-y-4 cursor-pointer select-none ${
+                  isDragOver
+                    ? "border-olive bg-olive-pale/40 scale-[1.01] shadow-md"
+                    : "border-line bg-paper hover:border-charcoal hover:bg-background"
+                }`}
+                aria-label="ลากรูปภาพมาวางหรือคลิกเพื่อเลือกไฟล์"
+              >
+                <div className="w-14 h-14 rounded-full bg-olive-pale/60 border border-olive/30 flex items-center justify-center text-olive pointer-events-none">
+                  <Upload className="w-7 h-7" />
+                </div>
+                <div className="space-y-1 pointer-events-none">
+                  <strong className="block text-base font-semibold text-charcoal">
+                    ลากรูปภาพเสื้อผ้ามาวางที่นี่ (Drag & Drop)
+                  </strong>
+                  <span className="text-xs text-muted block">
+                    หรือคลิกเพื่อเลือกไฟล์จากคอมพิวเตอร์ของคุณ
+                  </span>
+                  <span className="text-[11px] text-muted font-mono block pt-1">
+                    รองรับไฟล์ JPEG, PNG, WebP ขนาดไม่เกิน 5 MB
+                  </span>
+                </div>
+                <input
+                  ref={desktopFileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                  onChange={handleFileSelect}
+                />
               </div>
-            </button>
+            </div>
 
-            {/* Secondary: Gallery Upload */}
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className="p-8 border-2 border-dashed border-line bg-paper hover:border-charcoal hover:bg-background transition-all text-center flex flex-col items-center justify-center space-y-3 cursor-pointer"
-            >
-              <Upload className="w-8 h-8 text-charcoal" />
-              <div>
-                <strong className="block text-sm text-charcoal">เลือกจากคลังภาพ</strong>
-                <span className="text-xs text-muted">JPEG, PNG, WebP (ไม่เกิน 5 MB)</span>
-              </div>
-            </button>
+            {/* 2. Mobile View (visible only on mobile md:hidden): Prominent Touch-Friendly Camera Button */}
+            <div className="md:hidden space-y-3">
+              {/* Primary Large Camera Trigger */}
+              <button
+                type="button"
+                onClick={() => mobileCameraInputRef.current?.click()}
+                className="w-full p-6 bg-olive-pale/30 border-2 border-olive hover:bg-olive-pale/50 active:scale-[0.98] transition-all flex flex-col items-center justify-center text-center space-y-3 cursor-pointer shadow-sm rounded-none"
+              >
+                <div className="w-16 h-16 rounded-full bg-olive text-background flex items-center justify-center shadow-md">
+                  <Camera className="w-8 h-8" />
+                </div>
+                <div className="space-y-1">
+                  <strong className="block text-base font-semibold text-charcoal">
+                    ถ่ายรูปด้วยกล้องทันที
+                  </strong>
+                  <span className="text-xs text-muted block max-w-xs mx-auto">
+                    แตะที่นี่เพื่อเปิดกล้องมือถือถ่ายเสื้อผ้า ระบบ AI จะวิเคราะห์ภาพให้อัตโนมัติ
+                  </span>
+                </div>
+                <span className="inline-flex items-center gap-1 px-3 py-1 bg-olive text-background text-[11px] font-mono uppercase tracking-wider rounded-full">
+                  เปิดกล้องหลังถ่ายภาพทันที
+                </span>
+              </button>
 
-            <input
-              ref={cameraInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className="hidden"
-              onChange={handleFileSelect}
-            />
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/jpeg,image/png,image/webp"
-              className="hidden"
-              onChange={handleFileSelect}
-            />
+              {/* Secondary Mobile Option: Pick from Photo Library */}
+              <button
+                type="button"
+                onClick={() => mobileGalleryInputRef.current?.click()}
+                className="w-full py-3.5 px-4 border border-line bg-paper hover:bg-background text-charcoal text-xs font-medium flex items-center justify-center gap-2 transition-colors cursor-pointer min-h-[48px]"
+              >
+                <Upload className="w-4 h-4 text-muted" />
+                <span>หรือเลือกรูปจากคลังภาพในเครื่อง (Photo Library)</span>
+              </button>
+
+              {/* Native mobile camera input with capture="environment" and accept="image/*" */}
+              <input
+                ref={mobileCameraInputRef}
+                type="file"
+                accept="image/*"
+                capture="environment"
+                className="hidden"
+                onChange={handleFileSelect}
+              />
+              {/* Native mobile gallery input */}
+              <input
+                ref={mobileGalleryInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileSelect}
+              />
+            </div>
           </div>
         )}
       </div>

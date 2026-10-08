@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import "./globals.css";
 
 const notoSansThai = Noto_Sans_Thai({
@@ -48,6 +49,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <SiteHeader user={currentUser} />
         <main id="main">{children}</main>
         <SiteFooter />
+        <MobileBottomNav user={currentUser} />
       </body>
     </html>
   );

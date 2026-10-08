@@ -4,6 +4,7 @@ import { requireCustomerExperiencePage } from "@/lib/auth";
 import { getWardrobeItems } from "@/lib/wardrobe";
 import { WardrobeItemCard } from "@/components/wardrobe/wardrobe-item-card";
 import { WardrobeInsightsPanel } from "@/components/wardrobe/wardrobe-insights-panel";
+import { AdaptiveWardrobeFilter } from "@/components/wardrobe/adaptive-wardrobe-filter";
 import { parseWardrobeFilters } from "@/lib/wardrobe-filters";
 import { getCustomerEntitlements } from "@/lib/entitlements";
 import type { WardrobeItemType, WardrobeAvailabilityStatus } from "@/lib/types";
@@ -100,92 +101,14 @@ export default async function WardrobePage({ searchParams }: PageProps) {
       {/* Wardrobe Insights Intelligence Panel */}
       <WardrobeInsightsPanel items={allItems} isPro={isPro} />
 
-      {/* Filter Toolbar */}
-      <div className="space-y-4 bg-paper border border-line p-4 sm:p-5">
-        <div className="flex items-center gap-2 text-xs font-mono text-muted uppercase">
-          <Filter className="w-3.5 h-3.5" />
-          <span>ตัวกรองเสื้อผ้า</span>
-        </div>
-
-        {/* Category Chips */}
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => {
-            const isActive = currentType === cat.key;
-            const nextParams = new URLSearchParams();
-            if (cat.key !== "all") nextParams.set("type", cat.key);
-            if (currentStatus !== "all") nextParams.set("status", currentStatus);
-            if (favoriteOnly) nextParams.set("favorite", "true");
-            const href = `/account/wardrobe?${nextParams.toString()}`;
-
-            return (
-              <Link
-                key={cat.key}
-                href={href}
-                className={`px-3 py-1.5 text-xs font-medium border transition-colors ${
-                  isActive
-                    ? "bg-charcoal text-background border-charcoal"
-                    : "bg-background text-charcoal border-line hover:border-charcoal"
-                }`}
-              >
-                {cat.label}
-              </Link>
-            );
-          })}
-        </div>
-
-        {/* Status & Favorite Filter */}
-        <div className="pt-3 border-t border-line flex flex-wrap items-center justify-between gap-4 text-xs">
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="text-muted font-medium">สถานะ:</span>
-            {statusFilters.map((s) => {
-              const isActive = currentStatus === s.key;
-              const nextParams = new URLSearchParams();
-              if (currentType !== "all") nextParams.set("type", currentType);
-              if (s.key !== "all") nextParams.set("status", s.key);
-              if (favoriteOnly) nextParams.set("favorite", "true");
-              const href = `/account/wardrobe?${nextParams.toString()}`;
-
-              return (
-                <Link
-                  key={s.key}
-                  href={href}
-                  className={`px-2.5 py-1 rounded-none font-medium transition-colors ${
-                    isActive
-                      ? "bg-charcoal text-background"
-                      : "text-muted hover:text-charcoal"
-                  }`}
-                >
-                  {s.label}
-                </Link>
-              );
-            })}
-          </div>
-
-          <div>
-            {(() => {
-              const nextParams = new URLSearchParams();
-              if (currentType !== "all") nextParams.set("type", currentType);
-              if (currentStatus !== "all") nextParams.set("status", currentStatus);
-              if (!favoriteOnly) nextParams.set("favorite", "true");
-              const href = `/account/wardrobe?${nextParams.toString()}`;
-
-              return (
-                <Link
-                  href={href}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 border transition-colors ${
-                    favoriteOnly
-                      ? "bg-danger/10 border-danger text-danger"
-                      : "border-line text-muted hover:text-charcoal"
-                  }`}
-                >
-                  <Heart className={`w-3.5 h-3.5 ${favoriteOnly ? "fill-current" : ""}`} />
-                  <span>เฉพาะที่ถูกใจ</span>
-                </Link>
-              );
-            })()}
-          </div>
-        </div>
-      </div>
+      {/* Adaptive Wardrobe Filter: inline toolbar on desktop, Grab/LINE MAN slide-up BottomSheet on mobile */}
+      <AdaptiveWardrobeFilter
+        categories={categories}
+        statusFilters={statusFilters}
+        currentType={currentType}
+        currentStatus={currentStatus}
+        favoriteOnly={favoriteOnly}
+      />
 
       {/* Grid or Empty State */}
       {items.length === 0 ? (

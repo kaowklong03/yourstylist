@@ -5,6 +5,7 @@ import { AdCard } from "@/components/ad-card";
 import { EditorialPageIntro } from "@/components/ui";
 import { filterAdsByCategory } from "@/lib/catalog-filter";
 import { getPublicAds, getPublicCategories } from "@/lib/catalog";
+import { AdaptiveCategoryFilter } from "@/components/catalog/adaptive-category-filter";
 import { Tag } from "lucide-react";
 
 export async function generateMetadata({
@@ -45,22 +46,11 @@ export default async function CategoryPage({
             }
           />
 
-          {/* Category navigation */}
-        <nav className="filter-row pt-4 border-t border-line/60" aria-label="หมวดหมู่อื่นๆ">
-          <Link href="/discover" className="filter-pill">
-            ทั้งหมด
-          </Link>
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/categories/${cat.slug}`}
-              className={`filter-pill ${cat.slug === slug ? "active" : ""}`}
-              aria-current={cat.slug === slug ? "page" : undefined}
-            >
-              {cat.name_th}
-            </Link>
-          ))}
-        </nav>
+          {/* Adaptive Category navigation: inline on desktop, Bottom Sheet on mobile */}
+          <AdaptiveCategoryFilter
+            categories={categories}
+            activeSlug={slug}
+          />
         </header>
 
       {/* Ads Grid or Explicit Empty State */}

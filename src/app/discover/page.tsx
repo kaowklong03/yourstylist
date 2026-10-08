@@ -4,6 +4,7 @@ import { AdCard } from "@/components/ad-card";
 import { EditorialPageIntro } from "@/components/ui";
 import { getPublicAds, getPublicCategories } from "@/lib/catalog";
 import { Pagination } from "@/components/pagination";
+import { AdaptiveCategoryFilter } from "@/components/catalog/adaptive-category-filter";
 import { Info } from "lucide-react";
 
 export const metadata: Metadata = { title: "ค้นหาสไตล์และร้านค้า | YourStylist" };
@@ -39,21 +40,11 @@ export default async function DiscoverPage({
             }
           />
 
-          {/* Category navigation */}
-          <nav className="filter-row pt-4 border-t border-line/60" aria-label="กรองตามหมวดหมู่">
-            <Link href="/discover" className="filter-pill active" aria-current="page">
-              ทั้งหมด ({totalAds})
-            </Link>
-            {categories.map((category) => (
-              <Link
-                href={`/categories/${category.slug}`}
-                className="filter-pill"
-                key={category.id}
-              >
-                {category.name_th}
-              </Link>
-            ))}
-          </nav>
+          {/* Adaptive Category navigation: inline on desktop, Bottom Sheet on mobile */}
+          <AdaptiveCategoryFilter
+            categories={categories}
+            totalCount={totalAds}
+          />
         </header>
 
         {/* Discovery Product Grid */}
