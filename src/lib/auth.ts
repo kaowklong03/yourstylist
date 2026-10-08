@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { getAdminEmails, isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
@@ -23,7 +24,7 @@ export function isConfiguredAdmin(
   );
 }
 
-export async function getCurrentUser(): Promise<CurrentUser | null> {
+export const getCurrentUser = cache(async function getCurrentUser(): Promise<CurrentUser | null> {
   if (!isSupabaseConfigured()) return null;
   const supabase = await createClient();
   const { data: { user }, error } = await supabase.auth.getUser();
@@ -50,7 +51,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     displayName: profile.display_name,
     avatarUrl: profile.avatar_url ?? null,
   };
-}
+});
 
 export async function requirePageRole(
   allowed: UserRole[],

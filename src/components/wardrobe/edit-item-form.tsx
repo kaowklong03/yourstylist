@@ -28,6 +28,7 @@ export function EditItemForm({ item }: Props) {
 
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [deletingType, setDeletingType] = useState<"soft" | "permanent" | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -97,6 +98,7 @@ export function EditItemForm({ item }: Props) {
 
   const handleDelete = async (permanent = false) => {
     setIsDeleting(true);
+    setDeletingType(permanent ? "permanent" : "soft");
     setErrorMsg(null);
 
     try {
@@ -113,6 +115,7 @@ export function EditItemForm({ item }: Props) {
       router.refresh();
     } catch (err) {
       setIsDeleting(false);
+      setDeletingType(null);
       setShowDeleteModal(false);
       setErrorMsg(err instanceof Error ? err.message : "เกิดข้อผิดพลาดในการลบเสื้อผ้า");
     }
@@ -204,7 +207,8 @@ export function EditItemForm({ item }: Props) {
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(true)}
-                className="inline-flex items-center gap-1.5 text-xs text-danger hover:underline"
+                disabled={isDeleting || isSaving}
+                className="inline-flex items-center gap-1.5 text-xs text-danger hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>ลบรายการนี้</span>
@@ -359,8 +363,8 @@ export function EditItemForm({ item }: Props) {
           <div className="pt-4 border-t border-line flex items-center justify-end gap-4">
             <button
               type="submit"
-              disabled={isSaving}
-              className="px-8 py-4 bg-charcoal text-background hover:bg-olive font-medium text-xs rounded-none transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+              disabled={isSaving || isDeleting}
+              className="px-8 py-4 bg-charcoal text-background hover:bg-olive font-medium text-xs rounded-none transition-colors disabled:opacity-50 inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
             >
               {isSaving ? (
                 <>
@@ -391,7 +395,8 @@ export function EditItemForm({ item }: Props) {
               <button
                 type="button"
                 onClick={() => setShowDeleteModal(false)}
-                className="px-4 py-2 border border-line text-charcoal text-xs font-medium hover:bg-paper"
+                disabled={isDeleting}
+                className="px-4 py-2 border border-line text-charcoal text-xs font-medium hover:bg-paper disabled:opacity-50 cursor-pointer disabled:cursor-not-allowed"
               >
                 ยกเลิก
               </button>
@@ -400,18 +405,32 @@ export function EditItemForm({ item }: Props) {
                 type="button"
                 onClick={() => handleDelete(false)}
                 disabled={isDeleting}
-                className="px-4 py-2 bg-danger text-background text-xs font-medium hover:bg-red-700 disabled:opacity-50"
+                className="px-4 py-2 bg-danger text-background text-xs font-medium hover:bg-red-700 disabled:opacity-50 inline-flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
               >
-                {isDeleting ? "กำลังลบ..." : "ซ่อนรายการนี้"}
+                {deletingType === "soft" ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                    <span>กำลังซ่อน...</span>
+                  </>
+                ) : (
+                  "ซ่อนรายการนี้"
+                )}
               </button>
 
               <button
                 type="button"
                 onClick={() => handleDelete(true)}
                 disabled={isDeleting}
-                className="px-4 py-2 bg-black text-white text-xs font-medium hover:bg-neutral-800 disabled:opacity-50"
+                className="px-4 py-2 bg-black text-white text-xs font-medium hover:bg-neutral-800 disabled:opacity-50 inline-flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed"
               >
-                {isDeleting ? "กำลังลบ..." : "ลบถาวร"}
+                {deletingType === "permanent" ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
+                    <span>กำลังลบถาวร...</span>
+                  </>
+                ) : (
+                  "ลบถาวร"
+                )}
               </button>
             </div>
           </div>

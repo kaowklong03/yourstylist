@@ -43,6 +43,7 @@ export function SiteHeader({ user }: { user?: CurrentUser | null }) {
                 <Link
                   href={link.href}
                   key={link.href}
+                  prefetch={true}
                   aria-current={current ? "page" : undefined}
                   className={`transition-colors ${current ? "text-charcoal font-semibold" : "hover:text-charcoal"}`}
                 >
@@ -59,6 +60,7 @@ export function SiteHeader({ user }: { user?: CurrentUser | null }) {
           ) : (
             <Link
               href="/login/customer"
+              prefetch={true}
               className="hidden sm:inline-flex items-center gap-1.5 text-xs font-medium text-charcoal hover:text-olive transition-colors min-h-[44px] px-2"
             >
               <User className="w-4 h-4 text-muted" />
@@ -69,6 +71,7 @@ export function SiteHeader({ user }: { user?: CurrentUser | null }) {
           {/* Primary Stylist CTA */}
           <Link
             href="/ai-stylist"
+            prefetch={true}
             className="site-header-cta px-4 py-2 bg-charcoal text-background hover:bg-olive font-medium text-xs rounded-none transition-colors inline-flex items-center gap-1.5 min-h-[44px]"
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -98,6 +101,7 @@ export function SiteHeader({ user }: { user?: CurrentUser | null }) {
                     <Link
                       href={link.href}
                       key={link.href}
+                      prefetch={true}
                       className="block text-sm text-charcoal hover:text-olive py-1"
                     >
                       {link.label}

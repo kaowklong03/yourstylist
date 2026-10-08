@@ -23,6 +23,7 @@ import {
   Compass,
   SlidersHorizontal,
   Camera,
+  Loader2,
 } from "lucide-react";
 import { SponsoredAdSection } from "@/components/sponsored-ad-section";
 import type { OutfitResponse, WardrobeItem, WardrobeOutfitResponse } from "@/lib/types";
@@ -202,6 +203,26 @@ export function StylistForm({
   const [generalResult, setGeneralResult] = useState<OutfitResponse | null>(null);
   const [wardrobeResult, setWardrobeResult] = useState<WardrobeOutfitResponse | null>(null);
   const [error, setError] = useState("");
+  const [aiGenerationStep, setAiGenerationStep] = useState<number>(1);
+
+  useEffect(() => {
+    if (!isSubmitting) return;
+
+    setAiGenerationStep(1);
+
+    const timer1 = setTimeout(() => {
+      setAiGenerationStep(2);
+    }, 1500);
+
+    const timer2 = setTimeout(() => {
+      setAiGenerationStep(3);
+    }, 3200);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [isSubmitting]);
 
   useEffect(() => {
     if (initialRoutine) {
@@ -292,6 +313,11 @@ export function StylistForm({
     setError("");
     setGeneralResult(null);
     setWardrobeResult(null);
+    setAiGenerationStep(1);
+
+    setTimeout(() => {
+      document.querySelector("#stylist-results")?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
 
     const payload = {
       ...values,
@@ -342,7 +368,8 @@ export function StylistForm({
         <button
           type="button"
           onClick={() => setMode("general")}
-          className={`flex-1 py-3 px-4 text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+          disabled={isSubmitting}
+          className={`flex-1 py-3 px-4 text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
             mode === "general"
               ? "bg-charcoal text-background shadow-sm"
               : "text-muted hover:text-charcoal"
@@ -355,7 +382,8 @@ export function StylistForm({
         <button
           type="button"
           onClick={() => setMode("wardrobe")}
-          className={`flex-1 py-3 px-4 text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 ${
+          disabled={isSubmitting}
+          className={`flex-1 py-3 px-4 text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
             mode === "wardrobe"
               ? "bg-charcoal text-background shadow-sm"
               : "text-muted hover:text-charcoal"
@@ -666,7 +694,7 @@ export function StylistForm({
           <button
             type="submit"
             disabled={isSubmitting || (mode === "wardrobe" && wardrobeItems.length < 1)}
-            className="w-full py-5 bg-charcoal text-background hover:bg-olive font-semibold text-sm rounded-none transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:opacity-50"
+            className="w-full py-5 bg-charcoal text-background hover:bg-olive font-semibold text-sm rounded-none transition-all flex items-center justify-center gap-2 shadow-md cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isSubmitting ? (
               <>
@@ -712,12 +740,219 @@ export function StylistForm({
       {/* Results Rendering Section */}
       <section id="stylist-results" className="mt-16 pt-12 border-t border-line scroll-mt-24" aria-live="polite">
         {isSubmitting && (
-          <div className="space-y-6 animate-pulse">
-            <div className="h-8 bg-line/40 rounded w-1/3"></div>
-            <div className="grid md:grid-cols-3 gap-6 mt-8">
-              <div className="h-96 bg-paper border border-line p-6"></div>
-              <div className="h-96 bg-paper border border-line p-6"></div>
-              <div className="h-96 bg-paper border border-line p-6"></div>
+          <div className="space-y-8" role="status" aria-label="AI Stylist กำลังสร้างสรรค์ชุด">
+            {/* Interactive AI Progress Panel */}
+            <div className="bg-paper border border-line p-6 sm:p-8 space-y-5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-line pb-4">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 text-xs font-mono text-olive uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5 animate-spin" />
+                    <span>AI Stylist Reasoning Engine</span>
+                  </div>
+                  <h3 className="font-serif text-2xl sm:text-3xl text-charcoal font-normal">
+                    กำลังสร้างสรรค์ 3 ลุคเฉพาะคุณ
+                  </h3>
+                  <p className="text-xs text-muted">
+                    วิเคราะห์ข้อมูลเพื่อแมตช์ชุดที่สอดคล้องกับสภาพอากาศ กิจกรรม และตู้เสื้อผ้าของคุณ
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs font-mono bg-olive-pale/80 text-olive-dark px-3 py-1.5 self-start sm:self-center border border-olive/20">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-olive" />
+                  <span>ขั้นตอนที่ {aiGenerationStep}/3</span>
+                </div>
+              </div>
+
+              {/* Progress bar track */}
+              <div className="h-1.5 w-full bg-line/40 overflow-hidden">
+                <div
+                  className="h-full bg-olive transition-all duration-700 ease-out shadow-[0_0_8px_rgba(57,67,47,0.4)]"
+                  style={{
+                    width: aiGenerationStep === 1 ? "35%" : aiGenerationStep === 2 ? "70%" : "95%",
+                  }}
+                />
+              </div>
+
+              {/* 3 Step Timeline Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-1">
+                {/* Step 1 */}
+                <div
+                  className={`p-4 border transition-all duration-300 flex flex-col justify-between space-y-3 ${
+                    aiGenerationStep === 1
+                      ? "border-charcoal bg-background shadow-xs ring-1 ring-charcoal/10"
+                      : aiGenerationStep > 1
+                      ? "border-line bg-paper-hover/40"
+                      : "border-line/40 opacity-50 bg-paper"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-muted">ขั้นตอนที่ 01</span>
+                    {aiGenerationStep > 1 ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] text-olive font-medium">
+                        <Check className="w-3.5 h-3.5" />
+                        <span>เสร็จสิ้น</span>
+                      </span>
+                    ) : aiGenerationStep === 1 ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] text-olive font-medium">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>กำลังสแกน</span>
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-muted">รอคิว</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-sm text-charcoal mb-1">
+                      สแกนตู้เสื้อผ้าและสไตล์ประจำวัน
+                    </h4>
+                    <p className="text-xs text-muted leading-relaxed">
+                      {mode === "wardrobe"
+                        ? "ดึงข้อมูลเสื้อผ้าพร้อมใช้ในตู้ของคุณและข้อจำกัดการใส่"
+                        : "วิเคราะห์บริบทกิจกรรม ระดับความเป็นทางการ และความชอบ"}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 2 */}
+                <div
+                  className={`p-4 border transition-all duration-300 flex flex-col justify-between space-y-3 ${
+                    aiGenerationStep === 2
+                      ? "border-charcoal bg-background shadow-xs ring-1 ring-charcoal/10"
+                      : aiGenerationStep > 2
+                      ? "border-line bg-paper-hover/40"
+                      : "border-line/40 opacity-50 bg-paper"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-muted">ขั้นตอนที่ 02</span>
+                    {aiGenerationStep > 2 ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] text-olive font-medium">
+                        <Check className="w-3.5 h-3.5" />
+                        <span>เสร็จสิ้น</span>
+                      </span>
+                    ) : aiGenerationStep === 2 ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] text-olive font-medium">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>กำลังวิเคราะห์</span>
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-muted">รอคิว</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-sm text-charcoal mb-1">
+                      วิเคราะห์สภาพอากาศและ Personal Color
+                    </h4>
+                    <p className="text-xs text-muted leading-relaxed">
+                      คำนวณอุณหภูมิ ความโปร่งสบายเนื้อผ้า และโทนสีที่เหมาะสมกับสภาพแวดล้อม
+                    </p>
+                  </div>
+                </div>
+
+                {/* Step 3 */}
+                <div
+                  className={`p-4 border transition-all duration-300 flex flex-col justify-between space-y-3 ${
+                    aiGenerationStep === 3
+                      ? "border-charcoal bg-background shadow-xs ring-1 ring-charcoal/10"
+                      : "border-line/40 opacity-50 bg-paper"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs text-muted">ขั้นตอนที่ 03</span>
+                    {aiGenerationStep === 3 ? (
+                      <span className="inline-flex items-center gap-1 text-[11px] text-olive font-medium">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>กำลังจัดชุด</span>
+                      </span>
+                    ) : (
+                      <span className="text-[11px] text-muted">รอคิว</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="font-medium text-sm text-charcoal mb-1">
+                      คำนวณแมตช์ 3 ลุค (Safe, Elevated, Comfortable)
+                    </h4>
+                    <p className="text-xs text-muted leading-relaxed">
+                      จัดสัดส่วน เลเยอร์ คุมโทนสี และสรุปคำแนะนำเทคนิคการแต่งตัว
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Skeleton Preview Cards for 3 Direction Looks */}
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                { no: "01", name: "Safe Look", desc: "คลาสสิก ปลอดภัย มั่นใจได้ทุกสถานการณ์" },
+                { no: "02", name: "Elevated Look", desc: "เพิ่มลูกเล่น เลเยอร์ และดีเทลพิเศษ" },
+                { no: "03", name: "Comfortable Look", desc: "เน้นความคล่องตัว สบายตัวตลอดวัน" },
+              ].map((item) => (
+                <div
+                  key={item.no}
+                  className="bg-paper border border-line p-6 space-y-5 flex flex-col justify-between relative overflow-hidden"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between border-b border-line pb-3">
+                      <span className="font-mono text-xs text-muted">{item.no}</span>
+                      <span className="text-[11px] px-2 py-0.5 font-mono bg-olive/10 text-olive font-medium">
+                        {item.name}
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="h-6 bg-line/40 w-3/4 animate-pulse" />
+                      <p className="text-xs text-muted">{item.desc}</p>
+                    </div>
+
+                    <div className="space-y-3 pt-3 border-t border-line/60">
+                      <div className="flex items-center justify-between">
+                        <div className="h-3 bg-line/40 w-16 animate-pulse" />
+                        <div className="h-3 bg-line/30 w-28 animate-pulse" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="h-3 bg-line/40 w-20 animate-pulse" />
+                        <div className="h-3 bg-line/30 w-32 animate-pulse" />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div className="h-3 bg-line/40 w-14 animate-pulse" />
+                        <div className="h-3 bg-line/30 w-24 animate-pulse" />
+                      </div>
+                    </div>
+
+                    <div className="p-3 bg-background border border-line/60 space-y-2">
+                      <div className="h-2.5 bg-line/40 w-full animate-pulse" />
+                      <div className="h-2.5 bg-line/30 w-4/5 animate-pulse" />
+                    </div>
+                  </div>
+
+                  <div className="pt-4 border-t border-line flex items-center justify-between">
+                    <div className="h-4 bg-line/30 w-24 animate-pulse" />
+                    <div className="h-8 bg-line/40 w-20 animate-pulse" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {error && !isSubmitting && !generalResult && !wardrobeResult && (
+          <div className="bg-paper border border-danger/30 p-8 sm:p-10 space-y-5 text-center max-w-xl mx-auto" role="alert">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-danger/10 text-danger mx-auto">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <div className="space-y-2">
+              <h3 className="font-serif text-2xl text-charcoal font-normal">ไม่สามารถสร้างคำแนะนำได้ในขณะนี้</h3>
+              <p className="text-sm text-danger">{error}</p>
+            </div>
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                className="px-6 py-3 bg-charcoal text-background text-xs font-medium hover:bg-olive transition-colors inline-flex items-center gap-2 cursor-pointer"
+              >
+                <span>กลับไปตรวจสอบข้อมูลฟอร์ม</span>
+              </button>
             </div>
           </div>
         )}

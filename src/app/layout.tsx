@@ -30,6 +30,7 @@ export const metadata: Metadata = {
 
 import { getCurrentUser } from "@/lib/auth";
 import { cookies } from "next/headers";
+import { NavigationProgress } from "@/components/navigation-progress";
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const currentUser = await getCurrentUser();
@@ -40,6 +41,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="th" className={`${notoSansThai.variable} ${notoSerifThai.variable}`} data-theme={theme} data-accent={accent}>
       <body className="bg-background text-foreground antialiased selection:bg-olive-pale selection:text-olive-dark">
+        <NavigationProgress />
         <a className="skip-link" href="#main">
           ข้ามไปเนื้อหาหลัก
         </a>

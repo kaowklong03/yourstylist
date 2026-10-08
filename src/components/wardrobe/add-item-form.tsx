@@ -385,8 +385,8 @@ export function AddItemForm() {
               <span className="text-xs text-muted">กดบันทึกทันทีหากข้อมูลถูกต้องแล้ว</span>
               <button
                 type="submit"
-                disabled={isSaving || !name.trim()}
-                className="w-full sm:w-auto px-8 py-3.5 bg-charcoal text-background hover:bg-olive font-semibold text-xs rounded-none transition-colors inline-flex items-center justify-center gap-2"
+                disabled={isSaving || isUploading || isAnalyzing || !name.trim()}
+                className="w-full sm:w-auto px-8 py-3.5 bg-charcoal text-background hover:bg-olive font-semibold text-xs rounded-none transition-colors inline-flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSaving ? (
                   <>

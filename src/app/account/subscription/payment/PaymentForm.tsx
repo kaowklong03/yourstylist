@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { uploadPaymentSlip } from "./actions";
 
 export default function PaymentForm({ requestId }: { requestId: string }) {
@@ -130,9 +131,16 @@ export default function PaymentForm({ requestId }: { requestId: string }) {
       <button 
         type="submit" 
         disabled={isSubmitting || !file || !confirmed}
-        className="w-full py-2 px-4 bg-[var(--accent-color,theme(colors.olive.dark))] text-primary-foreground rounded font-medium disabled:opacity-50"
+        className="w-full py-2.5 px-4 bg-[var(--accent-color,theme(colors.olive.dark))] text-primary-foreground rounded font-medium disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed"
       >
-        {isSubmitting ? "กำลังอัปโหลด..." : "ส่งเพื่อตรวจสอบ"}
+        {isSubmitting ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+            <span>กำลังอัปโหลด...</span>
+          </>
+        ) : (
+          "ส่งเพื่อตรวจสอบ"
+        )}
       </button>
     </form>
   );

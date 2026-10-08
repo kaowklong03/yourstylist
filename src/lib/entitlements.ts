@@ -1,8 +1,9 @@
+import { cache } from "react";
 import { createClient } from "./supabase/server";
 import { hasProductProEntitlement } from "@/lib/capabilities";
 import type { UserRole } from "@/lib/types";
 
-export async function getCustomerEntitlements(userId: string, role: UserRole = "customer") {
+export const getCustomerEntitlements = cache(async function getCustomerEntitlements(userId: string, role: UserRole = "customer") {
   if (role === "admin") {
     return { isProActive: true, plan: "pro", status: "active" };
   }
@@ -20,7 +21,7 @@ export async function getCustomerEntitlements(userId: string, role: UserRole = "
     plan: subscription?.plan || "free",
     status: subscription?.status || "pending",
   };
-}
+});
 
 export async function requireActivePro(userId: string, role: UserRole = "customer") {
   const entitlements = await getCustomerEntitlements(userId, role);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ShieldCheck, User, Sliders, Heart } from "lucide-react";
+import { Check, ShieldCheck, User, Sliders, Heart, Loader2 } from "lucide-react";
 
 interface ProfileFormProps {
   initial: {
@@ -258,9 +258,16 @@ export function ProfileForm({ initial }: ProfileFormProps) {
         <button
           type="submit"
           disabled={pending}
-          className="px-8 py-4 bg-charcoal text-background hover:bg-olive font-semibold text-xs rounded-none transition-colors disabled:opacity-50 inline-flex items-center gap-2"
+          className="px-8 py-4 bg-charcoal text-background hover:bg-olive font-semibold text-xs rounded-none transition-colors disabled:opacity-50 inline-flex items-center gap-2 cursor-pointer disabled:cursor-not-allowed"
         >
-          {pending ? "กำลังบันทึก…" : "บันทึกการเปลี่ยนแปลงโปรไฟล์"}
+          {pending ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+              <span>กำลังบันทึก…</span>
+            </>
+          ) : (
+            "บันทึกการเปลี่ยนแปลงโปรไฟล์"
+          )}
         </button>
       </div>
     </form>

@@ -24,9 +24,19 @@ export async function GET(request: Request) {
   const user = await getCurrentUser();
   const allowed = await canReadAsset(admin, bucket, path, user);
   if (!allowed) return new NextResponse(null, { status: 404 });
-  const { data, error } = await admin.storage.from(bucket).createSignedUrl(path, 120);
+  const signedDuration = bucket === "ad-assets" || bucket === "shop-assets" ? 3600 : 1800;
+  const { data, error } = await admin.storage.from(bucket).createSignedUrl(path, signedDuration);
   if (error) return new NextResponse(null, { status: 404 });
-  return NextResponse.redirect(data.signedUrl, 307);
+  const cacheControl =
+    bucket === "ad-assets" || bucket === "shop-assets"
+      ? "public, max-age=3600, stale-while-revalidate=86400"
+      : "private, max-age=1800, stale-while-revalidate=3600";
+  return NextResponse.redirect(data.signedUrl, {
+    status: 307,
+    headers: {
+      "Cache-Control": cacheControl,
+    },
+  });
 }
 
 async function canReadAsset(

@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Mail, Lock, User, AlertCircle, CheckCircle2, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, CheckCircle2, Eye, EyeOff, Loader2 } from "lucide-react";
 import { loginSchema } from "@/lib/validation";
 
 type Role = "customer" | "merchant";
@@ -69,7 +69,7 @@ export function AuthForm({
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ ...values, role }),
       });
-      const data = (await response.json()) as {
+      const data = ((await response.json().catch(() => ({}))) || {}) as {
         error?: string;
         redirectTo?: string;
         message?: string;
@@ -103,10 +103,11 @@ export function AuthForm({
           <div className="relative">
             <User className="w-4 h-4 text-muted absolute left-3 top-3" />
             <input
-              className="w-full pl-9 pr-3 py-2.5 bg-background border border-line rounded-lg text-sm"
+              className="w-full pl-9 pr-3 py-2.5 bg-background border border-line rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               id="auth-display-name"
               placeholder="สมชาย ใจดี"
               autoComplete="name"
+              disabled={form.formState.isSubmitting}
               {...form.register("displayName")}
             />
           </div>
@@ -121,11 +122,12 @@ export function AuthForm({
         <div className="relative">
           <Mail className="w-4 h-4 text-muted absolute left-3 top-3" />
           <input
-            className="w-full pl-9 pr-3 py-2.5 bg-background border border-line rounded-lg text-sm"
+            className="w-full pl-9 pr-3 py-2.5 bg-background border border-line rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             id="auth-email"
             type="email"
             placeholder="name@example.com"
             autoComplete="email"
+            disabled={form.formState.isSubmitting}
             {...form.register("email")}
           />
         </div>
@@ -149,11 +151,12 @@ export function AuthForm({
         <div className="relative">
           <Lock className="w-4 h-4 text-muted absolute left-3 top-3" />
           <input
-            className="w-full pl-9 pr-10 py-2.5 bg-background border border-line rounded-lg text-sm"
+            className="w-full pl-9 pr-10 py-2.5 bg-background border border-line rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             id="auth-password"
             type={showPassword ? "text" : "password"}
             placeholder="อย่างน้อย 6 ตัวอักษร"
             autoComplete={mode === "login" ? "current-password" : "new-password"}
+            disabled={form.formState.isSubmitting}
             {...form.register("password")}
           />
           <button
@@ -173,7 +176,12 @@ export function AuthForm({
       {mode === "register" ? (
         <div>
           <label className="flex items-start gap-2.5 text-xs text-muted cursor-pointer mt-2">
-            <input type="checkbox" className="mt-0.5 rounded border-line text-olive focus:ring-olive" {...form.register("acceptTerms")} />
+            <input
+              type="checkbox"
+              className="mt-0.5 rounded border-line text-olive focus:ring-olive disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={form.formState.isSubmitting}
+              {...form.register("acceptTerms")}
+            />
             <span>
               ฉันยอมรับ{" "}
               <Link href="/terms" className="underline hover:text-charcoal">
@@ -206,15 +214,20 @@ export function AuthForm({
       ) : null}
 
       <button
-        className="w-full button button-solid py-2.5 mt-2 text-sm font-medium"
+        className="w-full button button-solid py-2.5 mt-2 text-sm font-medium flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
         type="submit"
         disabled={form.formState.isSubmitting}
       >
-        {form.formState.isSubmitting
-          ? "กำลังดำเนินการ…"
-          : mode === "login"
-            ? "เข้าสู่ระบบ"
-            : "สร้างบัญชี"}
+        {form.formState.isSubmitting ? (
+          <>
+            <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+            <span>กำลังดำเนินการ…</span>
+          </>
+        ) : mode === "login" ? (
+          "เข้าสู่ระบบ"
+        ) : (
+          "สร้างบัญชี"
+        )}
       </button>
 
       <div className="pt-4 border-t border-line mt-4 flex flex-col gap-2 text-xs text-center text-muted">
